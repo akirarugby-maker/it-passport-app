@@ -9,6 +9,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { questions } from '@/data/questions';
 import { slides } from '@/data/slides';
 import { domainLabel, domainChartColor } from '@/utils/domain';
+import { format } from 'date-fns';
 import type { Domain } from '@/types';
 
 const DOMAINS: Domain[] = ['strategy', 'management', 'technology'];
@@ -16,9 +17,27 @@ const DAILY_GOAL_QUESTIONS = 20;
 
 export const HomePage = () => {
   const navigate = useNavigate();
-  const { answerHistory, streakDays, progress } = useAppStore();
-  const todayStats = useAppStore((s) => s.getTodayStats());
-  const weakIds = useAppStore((s) => s.getWeakQuestionIds());
+  const { answerHistory, streakDays, progress, dailyStudy } = useAppStore();
+
+  // todayStats をインラインで計算（セレクターで新しいオブジェクトを返すと無限ループになる）
+  const todayStr = format(new Date(), 'yyyy-MM-dd');
+  const todayEntry = dailyStudy.find((d) => d.date === todayStr);
+  const todayStats = {
+    questions: todayEntry?.questionCount ?? 0,
+    correct: todayEntry?.correctCount ?? 0,
+    slides: todayEntry?.slidesSeen ?? 0,
+  };
+
+  // weakIds をインラインで計算（セレクターで新しい配列を返すと無限ループになる）
+  const qCounts: Record<string, { total: number; correct: number }> = {};
+  for (const a of answerHistory) {
+    if (!qCounts[a.questionId]) qCounts[a.questionId] = { total: 0, correct: 0 };
+    qCounts[a.questionId].total++;
+    if (a.isCorrect) qCounts[a.questionId].correct++;
+  }
+  const weakIds = Object.entries(qCounts)
+    .filter(([, v]) => v.total >= 1 && v.correct / v.total < 0.6)
+    .map(([id]) => id);
 
   const domainStats = DOMAINS.map((domain) => {
     const domainQs = questions.filter((q) => q.domain === domain);
