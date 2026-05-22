@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - claude/laughing-gates-C2Ydv
   workflow_dispatch:
 
 permissions:
