@@ -1,6 +1,9 @@
 import type { Question } from '@/types';
+import { strategyQuestionsExtra } from './questions_strategy_extra';
+import { managementQuestionsExtra } from './questions_management_extra';
+import { technologyQuestionsExtra } from './questions_technology_extra';
 
-export const questions: Question[] = [
+const baseQuestions: Question[] = [
   // ========== ストラテジ系 ==========
 
   // 経営戦略・企業活動
@@ -764,6 +767,13 @@ export const questions: Question[] = [
     relatedSlideId: 'slide-technology-01',
     relatedGlossaryIds: ['g-iaas'],
   },
+];
+
+export const questions: Question[] = [
+  ...baseQuestions,
+  ...strategyQuestionsExtra,
+  ...managementQuestionsExtra,
+  ...technologyQuestionsExtra,
 ];
 
 export const getQuestionsByDomain = (domain: string) =>
