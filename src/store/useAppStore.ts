@@ -11,7 +11,10 @@ const defaultProgress = (): AppState['progress'] => ({
   glossaryTerms: {},
 });
 
+type ProgressBaseline = { slide: number; quiz: number; glossary: number };
+
 interface AppStore extends AppState {
+  progressTableBaselines: Record<string, ProgressBaseline>;
   recordSlideSection: (sectionId: string) => void;
   recordQuestion: (questionId: string) => void;
   recordGlossaryTerm: (termId: string) => void;
@@ -19,6 +22,7 @@ interface AppStore extends AppState {
   updateDailyStudy: (questionCount: number, correct: number, slides: number) => void;
   setNavigationHistory: (fromSlideId?: string, fromSectionId?: string) => void;
   clearNavigationHistory: () => void;
+  resetDomainProgress: (baselines: Record<string, ProgressBaseline>) => void;
   getRepetition: (type: 'slide' | 'question' | 'glossary', id: string) => RepetitionRecord;
   getAccuracyByDomain: (domain: Domain) => number;
   getWeakQuestionIds: () => string[];
@@ -64,6 +68,7 @@ export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
       progress: defaultProgress(),
+      progressTableBaselines: {},
       answerHistory: [],
       dailyStudy: [],
       examSessions: [],
@@ -147,6 +152,11 @@ export const useAppStore = create<AppStore>()(
         set({ navigationHistory: { fromSlideId, fromSectionId } }),
 
       clearNavigationHistory: () => set({ navigationHistory: {} }),
+
+      resetDomainProgress: (baselines) =>
+        set((s) => ({
+          progressTableBaselines: { ...s.progressTableBaselines, ...baselines },
+        })),
 
       getRepetition: (type, id) => {
         const s = get().progress;

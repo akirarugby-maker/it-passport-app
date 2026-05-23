@@ -28,7 +28,7 @@ type QuizState = 'select' | 'playing' | 'result';
 export const QuizPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { addAnswer, getWeakQuestionIds, navigationHistory } = useAppStore();
+  const { addAnswer, recordQuestion, getWeakQuestionIds, navigationHistory } = useAppStore();
 
   const [state, setState] = useState<QuizState>('select');
   const [mode, setMode] = useState<QuizMode>((searchParams.get('mode') as QuizMode) || 'random');
@@ -96,6 +96,7 @@ export const QuizPage = () => {
     const q = quizQuestions[currentIdx];
     setAnswers((prev) => ({ ...prev, [currentIdx]: idx }));
     setShowExplanation(true);
+    recordQuestion(q.id);
     addAnswer({
       questionId: q.id,
       isCorrect: idx === q.correctIndex,

@@ -1,12 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { Home, BookOpen, ClipboardList, BarChart2, BookMarked } from 'lucide-react';
+import { Home, BookOpen, ClipboardList, Clapperboard, BookMarked } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 const navItems = [
   { to: '/', icon: Home, label: 'ホーム' },
   { to: '/slides', icon: BookOpen, label: 'スライド学習' },
   { to: '/quiz', icon: ClipboardList, label: '問題演習' },
-  { to: '/records', icon: BarChart2, label: '学習記録' },
+  { to: '/records', icon: Clapperboard, label: 'YouTube' },
   { to: '/glossary', icon: BookMarked, label: '用語集' },
 ];
 
