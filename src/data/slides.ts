@@ -1,6 +1,7 @@
 import type { Slide } from '@/types';
+import { slidesExtra } from './slides_extra';
 
-export const slides: Slide[] = [
+const baseSlides: Slide[] = [
   // ========== ストラテジ系 ==========
   {
     id: 'slide-strategy-01',
@@ -805,6 +806,8 @@ Webの通信暗号化プロトコル。HTTPS=HTTP+TLS。
     ],
   },
 ];
+
+export const slides: Slide[] = [...baseSlides, ...slidesExtra];
 
 export const getSlideById = (id: string) => slides.find((s) => s.id === id);
 export const getSlidesByDomain = (domain: string) => slides.filter((s) => s.domain === domain);
