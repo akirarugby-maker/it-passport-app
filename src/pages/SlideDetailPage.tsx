@@ -136,7 +136,8 @@ export const SlideDetailPage = () => {
   };
 
   const goToGlossary = (termId?: string) => {
-    navigate(`/glossary${termId ? `?term=${termId}` : ''}&from=slide&fromSlide=${slide.id}`);
+    const base = termId ? `/glossary?term=${termId}` : '/glossary';
+    navigate(`${base}&from=slide&fromSlide=${slide.id}`);
   };
 
   const handleQuizAnswer = (questionId: string, idx: number) => {
@@ -214,18 +215,20 @@ export const SlideDetailPage = () => {
               </div>
 
               {/* Navigation links */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {section.keywords.slice(0, 3).map((kw) => (
-                  <button
-                    key={kw}
-                    onClick={() => goToGlossary()}
-                    className="text-xs px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full border border-purple-200 hover:bg-purple-100 transition-colors"
-                  >
-                    <BookMarked className="inline w-3 h-3 mr-1" />
-                    {kw}を用語集で確認
-                  </button>
-                ))}
-              </div>
+              {section.relatedGlossaryIds && section.relatedGlossaryIds.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {getTermsByIds(section.relatedGlossaryIds).slice(0, 4).map((term) => (
+                    <button
+                      key={term.id}
+                      onClick={() => goToGlossary(term.id)}
+                      className="text-xs px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full border border-purple-200 hover:bg-purple-100 transition-colors"
+                    >
+                      <BookMarked className="inline w-3 h-3 mr-1" />
+                      {term.term}を用語集で確認
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div className="mt-2 flex flex-wrap gap-2">
                 <button
