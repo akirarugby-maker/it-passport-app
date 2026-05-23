@@ -12,6 +12,87 @@ import { getTermsByIds } from '@/data/glossary';
 import { domainLabel, domainBadgeClass } from '@/utils/domain';
 import { cn } from '@/utils/cn';
 
+function renderContent(content: string) {
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  let i = 0;
+  let key = 0;
+
+  const isSeparatorRow = (l: string) => /^\s*\|[\s\-|:]+\|\s*$/.test(l);
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (line.trim().startsWith('|')) {
+      const tableLines: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        tableLines.push(lines[i]);
+        i++;
+      }
+      const rows = tableLines
+        .filter((l) => !isSeparatorRow(l))
+        .map((l) =>
+          l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim())
+        );
+      if (rows.length > 0) {
+        const [header, ...body] = rows;
+        elements.push(
+          <div key={key++} className="overflow-x-auto my-3 rounded-lg border border-gray-200">
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="bg-blue-50">
+                  {header.map((cell, ci) => (
+                    <th key={ci} className="px-3 py-2 text-left font-semibold text-gray-700 border-b border-gray-200 whitespace-nowrap">
+                      {cell}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {body.map((row, ri) => (
+                  <tr key={ri} className={ri % 2 !== 0 ? 'bg-gray-50' : ''}>
+                    {row.map((cell, ci) => (
+                      <td key={ci} className="px-3 py-2 text-gray-700 border-t border-gray-100">
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      continue;
+    }
+
+    if (line.startsWith('■')) {
+      elements.push(
+        <p key={key++} className="text-sm font-bold text-gray-800 mt-4 mb-1">
+          {line}
+        </p>
+      );
+      i++;
+      continue;
+    }
+
+    if (line.trim() === '') {
+      elements.push(<div key={key++} className="h-1" />);
+      i++;
+      continue;
+    }
+
+    elements.push(
+      <p key={key++} className="text-sm text-gray-700 leading-relaxed">
+        {line}
+      </p>
+    );
+    i++;
+  }
+
+  return <div className="space-y-0.5">{elements}</div>;
+}
+
 export const SlideDetailPage = () => {
   const { slideId } = useParams<{ slideId: string }>();
   const navigate = useNavigate();
@@ -115,8 +196,8 @@ export const SlideDetailPage = () => {
               </div>
 
               {/* Content */}
-              <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-line leading-relaxed">
-                {section.content}
+              <div className="max-w-none">
+                {renderContent(section.content)}
               </div>
 
               {/* Key points */}
