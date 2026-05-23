@@ -23,12 +23,17 @@ export const GlossaryPage = () => {
   const { recordGlossaryTerm, progress, navigationHistory } = useAppStore();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<Domain | 'all'>('all');
-  const [selectedId, setSelectedId] = useState<string | null>(searchParams.get('term'));
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const highlightId = searchParams.get('term');
 
+  // Scroll to and highlight the term from URL param, but don't auto-expand
   useEffect(() => {
-    const termId = searchParams.get('term');
-    if (termId) setSelectedId(termId);
-  }, [searchParams]);
+    if (highlightId) {
+      setTimeout(() => {
+        document.getElementById(`term-${highlightId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [highlightId]);
 
   useEffect(() => {
     if (selectedId) recordGlossaryTerm(selectedId);
@@ -112,8 +117,13 @@ export const GlossaryPage = () => {
           return (
             <Card
               key={term.id}
-              className={cn('transition-colors', isOpen ? 'border-purple-300' : 'hover:border-blue-200')}
+              className={cn(
+                'transition-colors',
+                isOpen ? 'border-purple-300' : 'hover:border-blue-200',
+                !isOpen && highlightId === term.id && 'border-blue-400 ring-2 ring-blue-200'
+              )}
             >
+              <div id={`term-${term.id}`} />
               {/* Header row — always visible */}
               <button
                 className="w-full text-left px-5 py-4"
