@@ -101,87 +101,85 @@ export const GlossaryPage = () => {
         </div>
       )}
 
-      {/* Term detail modal */}
+      {/* Term detail — inline card */}
       {selectedTerm && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-end md:items-center justify-center p-4">
-          <Card className="w-full max-w-lg max-h-[80vh] overflow-y-auto">
-            <CardBody>
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h2 className="text-lg font-bold text-gray-900">{selectedTerm.term}</h2>
-                  {selectedTerm.reading && (
-                    <p className="text-xs text-gray-400">読み：{selectedTerm.reading}</p>
-                  )}
-                </div>
-                <button onClick={() => setSelectedId(null)} className="text-gray-400 hover:text-gray-600">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2 mb-3">
-                <span className={cn('text-xs font-medium px-2 py-0.5 rounded', domainBadgeClass[selectedTerm.domain])}>
-                  {domainLabel[selectedTerm.domain]}
-                </span>
-                <span className="text-xs text-gray-400">{selectedTerm.category}</span>
-                <RepetitionBadge count={progress.glossaryTerms[selectedTerm.id]?.count ?? 0} size="sm" />
-              </div>
-
-              <p className="text-sm text-gray-700 leading-relaxed">{selectedTerm.definition}</p>
-
-              {selectedTerm.example && (
-                <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
-                  <p className="text-xs font-medium text-yellow-700 mb-1">使用例</p>
-                  <p className="text-xs text-gray-700">{selectedTerm.example}</p>
-                </div>
-              )}
-
-              {selectedTerm.relatedTermIds && selectedTerm.relatedTermIds.length > 0 && (
-                <div className="mt-3">
-                  <p className="text-xs font-medium text-gray-500 mb-2">関連用語</p>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedTerm.relatedTermIds.map((id) => {
-                      const t = getTermById(id);
-                      if (!t) return null;
-                      return (
-                        <button
-                          key={id}
-                          onClick={() => setSelectedId(id)}
-                          className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-                        >
-                          {t.term}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              <div className="mt-4 flex gap-2">
-                {selectedTerm.relatedSlideId && (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => navigate(`/slides/${selectedTerm.relatedSlideId}`)}
-                    className="flex-1"
-                  >
-                    <BookMarked className="w-4 h-4" />
-                    スライドで学ぶ
-                  </Button>
-                )}
-                {selectedTerm.relatedQuestionIds && selectedTerm.relatedQuestionIds.length > 0 && (
-                  <Button
-                    size="sm"
-                    onClick={() => navigate(`/quiz?mode=domain&domain=${selectedTerm.domain}`)}
-                    className="flex-1"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    関連問題を解く
-                  </Button>
+        <Card className="border-purple-200 bg-purple-50/30">
+          <CardBody>
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">{selectedTerm.term}</h2>
+                {selectedTerm.reading && (
+                  <p className="text-xs text-gray-400">読み：{selectedTerm.reading}</p>
                 )}
               </div>
-            </CardBody>
-          </Card>
-        </div>
+              <button onClick={() => setSelectedId(null)} className="text-gray-400 hover:text-gray-600 ml-2 shrink-0">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <span className={cn('text-xs font-medium px-2 py-0.5 rounded', domainBadgeClass[selectedTerm.domain])}>
+                {domainLabel[selectedTerm.domain]}
+              </span>
+              <span className="text-xs text-gray-400">{selectedTerm.category}</span>
+              <RepetitionBadge count={progress.glossaryTerms[selectedTerm.id]?.count ?? 0} size="sm" />
+            </div>
+
+            <p className="text-sm text-gray-700 leading-relaxed">{selectedTerm.definition}</p>
+
+            {selectedTerm.example && (
+              <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
+                <p className="text-xs font-medium text-yellow-700 mb-1">使用例</p>
+                <p className="text-xs text-gray-700">{selectedTerm.example}</p>
+              </div>
+            )}
+
+            {selectedTerm.relatedTermIds && selectedTerm.relatedTermIds.length > 0 && (
+              <div className="mt-3">
+                <p className="text-xs font-medium text-gray-500 mb-2">関連用語</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedTerm.relatedTermIds.map((id) => {
+                    const t = getTermById(id);
+                    if (!t) return null;
+                    return (
+                      <button
+                        key={id}
+                        onClick={() => setSelectedId(id)}
+                        className="text-xs px-2 py-1 bg-white text-gray-700 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors"
+                      >
+                        {t.term}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <div className="mt-4 flex gap-2">
+              {selectedTerm.relatedSlideId && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => navigate(`/slides/${selectedTerm.relatedSlideId}`)}
+                  className="flex-1"
+                >
+                  <BookMarked className="w-4 h-4" />
+                  スライドで学ぶ
+                </Button>
+              )}
+              {selectedTerm.relatedQuestionIds && selectedTerm.relatedQuestionIds.length > 0 && (
+                <Button
+                  size="sm"
+                  onClick={() => navigate(`/quiz?mode=domain&domain=${selectedTerm.domain}`)}
+                  className="flex-1"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  関連問題を解く
+                </Button>
+              )}
+            </div>
+          </CardBody>
+        </Card>
       )}
 
       {/* Terms list */}
