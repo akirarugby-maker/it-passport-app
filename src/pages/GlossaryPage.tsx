@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, BookMarked, ArrowLeft, ExternalLink, X } from 'lucide-react';
+import { Search, BookMarked, ArrowLeft, ExternalLink, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardBody } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { RepetitionBadge } from '@/components/ui/RepetitionBadge';
 import { useAppStore } from '@/store/useAppStore';
@@ -28,15 +27,11 @@ export const GlossaryPage = () => {
 
   useEffect(() => {
     const termId = searchParams.get('term');
-    if (termId) {
-      setSelectedId(termId);
-    }
+    if (termId) setSelectedId(termId);
   }, [searchParams]);
 
   useEffect(() => {
-    if (selectedId) {
-      recordGlossaryTerm(selectedId);
-    }
+    if (selectedId) recordGlossaryTerm(selectedId);
   }, [selectedId]);
 
   const filtered = query
@@ -45,8 +40,9 @@ export const GlossaryPage = () => {
     ? glossaryTerms
     : glossaryTerms.filter((t) => t.domain === filter);
 
-  const selectedTerm = selectedId ? getTermById(selectedId) : null;
   const fromSlide = navigationHistory.fromSlideId;
+
+  const toggle = (id: string) => setSelectedId((prev) => (prev === id ? null : id));
 
   return (
     <div className="space-y-4">
@@ -101,88 +97,7 @@ export const GlossaryPage = () => {
         </div>
       )}
 
-      {/* Term detail — inline card */}
-      {selectedTerm && (
-        <Card className="border-purple-200 bg-purple-50/30">
-          <CardBody>
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">{selectedTerm.term}</h2>
-                {selectedTerm.reading && (
-                  <p className="text-xs text-gray-400">読み：{selectedTerm.reading}</p>
-                )}
-              </div>
-              <button onClick={() => setSelectedId(null)} className="text-gray-400 hover:text-gray-600 ml-2 shrink-0">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex items-center gap-2 mb-3 flex-wrap">
-              <span className={cn('text-xs font-medium px-2 py-0.5 rounded', domainBadgeClass[selectedTerm.domain])}>
-                {domainLabel[selectedTerm.domain]}
-              </span>
-              <span className="text-xs text-gray-400">{selectedTerm.category}</span>
-              <RepetitionBadge count={progress.glossaryTerms[selectedTerm.id]?.count ?? 0} size="sm" />
-            </div>
-
-            <p className="text-sm text-gray-700 leading-relaxed">{selectedTerm.definition}</p>
-
-            {selectedTerm.example && (
-              <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
-                <p className="text-xs font-medium text-yellow-700 mb-1">使用例</p>
-                <p className="text-xs text-gray-700">{selectedTerm.example}</p>
-              </div>
-            )}
-
-            {selectedTerm.relatedTermIds && selectedTerm.relatedTermIds.length > 0 && (
-              <div className="mt-3">
-                <p className="text-xs font-medium text-gray-500 mb-2">関連用語</p>
-                <div className="flex flex-wrap gap-2">
-                  {selectedTerm.relatedTermIds.map((id) => {
-                    const t = getTermById(id);
-                    if (!t) return null;
-                    return (
-                      <button
-                        key={id}
-                        onClick={() => setSelectedId(id)}
-                        className="text-xs px-2 py-1 bg-white text-gray-700 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors"
-                      >
-                        {t.term}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            <div className="mt-4 flex gap-2">
-              {selectedTerm.relatedSlideId && (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => navigate(`/slides/${selectedTerm.relatedSlideId}`)}
-                  className="flex-1"
-                >
-                  <BookMarked className="w-4 h-4" />
-                  スライドで学ぶ
-                </Button>
-              )}
-              {selectedTerm.relatedQuestionIds && selectedTerm.relatedQuestionIds.length > 0 && (
-                <Button
-                  size="sm"
-                  onClick={() => navigate(`/quiz?mode=domain&domain=${selectedTerm.domain}`)}
-                  className="flex-1"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  関連問題を解く
-                </Button>
-              )}
-            </div>
-          </CardBody>
-        </Card>
-      )}
-
-      {/* Terms list */}
+      {/* Terms list — accordion style */}
       <div className="space-y-2">
         {filtered.length === 0 && (
           <div className="text-center py-8 text-gray-400">
@@ -192,13 +107,18 @@ export const GlossaryPage = () => {
         )}
         {filtered.map((term) => {
           const count = progress.glossaryTerms[term.id]?.count ?? 0;
+          const isOpen = selectedId === term.id;
+          const termDetail = isOpen ? getTermById(term.id) : null;
           return (
             <Card
               key={term.id}
-              onClick={() => setSelectedId(term.id)}
-              className="hover:border-blue-200 transition-colors"
+              className={cn('transition-colors', isOpen ? 'border-purple-300' : 'hover:border-blue-200')}
             >
-              <CardBody>
+              {/* Header row — always visible */}
+              <button
+                className="w-full text-left px-5 py-4"
+                onClick={() => toggle(term.id)}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -208,11 +128,82 @@ export const GlossaryPage = () => {
                       <span className="text-xs text-gray-400">{term.category}</span>
                     </div>
                     <h3 className="font-medium text-gray-900 mt-1">{term.term}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{term.definition}</p>
+                    {!isOpen && (
+                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{term.definition}</p>
+                    )}
                   </div>
-                  <RepetitionBadge count={count} size="sm" />
+                  <div className="flex items-center gap-2 shrink-0">
+                    <RepetitionBadge count={count} size="sm" />
+                    {isOpen
+                      ? <ChevronUp className="w-4 h-4 text-gray-400" />
+                      : <ChevronDown className="w-4 h-4 text-gray-400" />
+                    }
+                  </div>
                 </div>
-              </CardBody>
+              </button>
+
+              {/* Expanded detail */}
+              {isOpen && termDetail && (
+                <div className="px-5 pb-4 border-t border-purple-100 pt-3 bg-purple-50/30 rounded-b-xl">
+                  {termDetail.reading && (
+                    <p className="text-xs text-gray-400 mb-2">読み：{termDetail.reading}</p>
+                  )}
+
+                  <p className="text-sm text-gray-700 leading-relaxed">{termDetail.definition}</p>
+
+                  {termDetail.example && (
+                    <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
+                      <p className="text-xs font-medium text-yellow-700 mb-1">使用例</p>
+                      <p className="text-xs text-gray-700">{termDetail.example}</p>
+                    </div>
+                  )}
+
+                  {termDetail.relatedTermIds && termDetail.relatedTermIds.length > 0 && (
+                    <div className="mt-3">
+                      <p className="text-xs font-medium text-gray-500 mb-2">関連用語</p>
+                      <div className="flex flex-wrap gap-2">
+                        {termDetail.relatedTermIds.map((id) => {
+                          const t = getTermById(id);
+                          if (!t) return null;
+                          return (
+                            <button
+                              key={id}
+                              onClick={() => setSelectedId(id)}
+                              className="text-xs px-2 py-1 bg-white text-gray-700 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors"
+                            >
+                              {t.term}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-4 flex gap-2">
+                    {termDetail.relatedSlideId && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => navigate(`/slides/${termDetail.relatedSlideId}`)}
+                        className="flex-1"
+                      >
+                        <BookMarked className="w-4 h-4" />
+                        スライドで学ぶ
+                      </Button>
+                    )}
+                    {termDetail.relatedQuestionIds && termDetail.relatedQuestionIds.length > 0 && (
+                      <Button
+                        size="sm"
+                        onClick={() => navigate(`/quiz?mode=domain&domain=${termDetail.domain}`)}
+                        className="flex-1"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        関連問題を解く
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
             </Card>
           );
         })}
