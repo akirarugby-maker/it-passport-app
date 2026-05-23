@@ -129,7 +129,7 @@ export const GlossaryPage = () => {
                     </div>
                     <h3 className="font-medium text-gray-900 mt-1">{term.term}</h3>
                     {!isOpen && (
-                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{term.definition}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">タップして意味を確認</p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
