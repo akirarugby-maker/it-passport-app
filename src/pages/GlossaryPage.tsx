@@ -204,7 +204,7 @@ export const GlossaryPage = () => {
                     {termDetail.relatedQuestionIds && termDetail.relatedQuestionIds.length > 0 && (
                       <Button
                         size="sm"
-                        onClick={() => navigate(`/quiz?mode=domain&domain=${termDetail.domain}`)}
+                        onClick={() => navigate(`/quiz?termId=${termDetail.id}`)}
                         className="flex-1"
                       >
                         <ExternalLink className="w-4 h-4" />

@@ -131,8 +131,8 @@ export const SlideDetailPage = () => {
   const repetition = progress.slidesSections[section.id] || { count: 0, dates: [] };
   const quizQuestions = getQuestionsByIds(slide.quizQuestionIds);
 
-  const goToQuiz = (keyword?: string) => {
-    navigate(`/quiz?mode=domain&domain=${slide.domain}&keyword=${keyword ?? ''}&from=slide&fromSlide=${slide.id}`);
+  const goToQuiz = () => {
+    navigate(`/quiz?slideId=${slide.id}`);
   };
 
   const goToGlossary = (termId?: string) => {

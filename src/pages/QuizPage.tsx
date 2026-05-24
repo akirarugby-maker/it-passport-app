@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ClipboardList, Timer, ChevronLeft, ChevronRight, RotateCcw, BookOpen, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -6,6 +6,8 @@ import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { useAppStore } from '@/store/useAppStore';
 import { questions, getQuestionsByDomain, getQuestionsByIds } from '@/data/questions';
+import { getSlideById } from '@/data/slides';
+import { getTermById } from '@/data/glossary';
 import { domainLabel, domainBadgeClass } from '@/utils/domain';
 import { cn } from '@/utils/cn';
 import { format } from 'date-fns';
@@ -30,6 +32,9 @@ export const QuizPage = () => {
   const navigate = useNavigate();
   const { addAnswer, recordQuestion, getWeakQuestionIds, navigationHistory } = useAppStore();
 
+  const urlSlideId = searchParams.get('slideId') ?? undefined;
+  const urlTermId = searchParams.get('termId') ?? undefined;
+
   const [state, setState] = useState<QuizState>('select');
   const [mode, setMode] = useState<QuizMode>((searchParams.get('mode') as QuizMode) || 'random');
   const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>(
@@ -42,11 +47,33 @@ export const QuizPage = () => {
   const [timeLeft, setTimeLeft] = useState(EXAM_MINUTES * 60);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Auto-start if mode is passed in URL
+  // Title shown when coming from a slide or term
+  const quizTitle = useMemo(() => {
+    if (urlSlideId) {
+      const slide = getSlideById(urlSlideId);
+      return slide ? `「${slide.title}」の関連問題` : '';
+    }
+    if (urlTermId) {
+      const term = getTermById(urlTermId);
+      return term ? `「${term.term}」の関連問題` : '';
+    }
+    return '';
+  }, [urlSlideId, urlTermId]);
+
+  // Auto-start if slideId / termId / mode is passed in URL
   useEffect(() => {
-    const urlMode = searchParams.get('mode') as QuizMode;
-    if (urlMode) {
-      setMode(urlMode);
+    if (urlSlideId || urlTermId) {
+      const qs = buildQuestionsFromUrl();
+      if (qs.length > 0) {
+        setQuizQuestions(qs);
+        setCurrentIdx(0);
+        setAnswers({});
+        setShowExplanation(false);
+        setState('playing');
+      }
+    } else {
+      const urlMode = searchParams.get('mode') as QuizMode;
+      if (urlMode) setMode(urlMode);
     }
   }, []);
 
@@ -67,7 +94,30 @@ export const QuizPage = () => {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [state, mode]);
 
+  // Build questions specifically linked to a slide or term (used on auto-start)
+  const buildQuestionsFromUrl = () => {
+    if (urlSlideId) {
+      const slide = getSlideById(urlSlideId);
+      if (slide?.quizQuestionIds.length) {
+        return shuffle(getQuestionsByIds(slide.quizQuestionIds));
+      }
+    }
+    if (urlTermId) {
+      const term = getTermById(urlTermId);
+      if (term?.relatedQuestionIds?.length) {
+        return shuffle(getQuestionsByIds(term.relatedQuestionIds));
+      }
+      if (term) {
+        return shuffle(getQuestionsByDomain(term.domain)).slice(0, 10);
+      }
+    }
+    return shuffle(questions).slice(0, 10);
+  };
+
   const buildQuestions = () => {
+    // When re-starting from results screen while slideId/termId is in URL, reuse same pool
+    if (urlSlideId || urlTermId) return buildQuestionsFromUrl();
+
     let pool = questions;
     if (mode === 'domain' && selectedDomain) {
       pool = getQuestionsByDomain(selectedDomain);
@@ -269,8 +319,16 @@ export const QuizPage = () => {
         </div>
 
         <div className="flex gap-3">
-          <Button variant="secondary" className="flex-1" onClick={() => setState('select')}>
-            出題設定に戻る
+          <Button
+            variant="secondary"
+            className="flex-1"
+            onClick={() => {
+              if (urlSlideId) navigate(`/slides/${urlSlideId}`);
+              else if (urlTermId) navigate('/glossary');
+              else setState('select');
+            }}
+          >
+            {urlSlideId ? 'スライドに戻る' : urlTermId ? '用語集に戻る' : '出題設定に戻る'}
           </Button>
           <Button className="flex-1" onClick={startQuiz}>
             もう一度
@@ -289,11 +347,23 @@ export const QuizPage = () => {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" onClick={() => { if (timerRef.current) clearInterval(timerRef.current); setState('select'); }}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            if (urlSlideId) navigate(`/slides/${urlSlideId}`);
+            else if (urlTermId) navigate('/glossary');
+            else setState('select');
+          }}
+        >
           <ChevronLeft className="w-4 h-4" />
-          終了
+          {urlSlideId || urlTermId ? '戻る' : '終了'}
         </Button>
-        <div className="text-sm text-gray-500">{currentIdx + 1} / {quizQuestions.length}</div>
+        <div className="text-center">
+          {quizTitle && <div className="text-xs text-blue-600 font-medium truncate max-w-[180px]">{quizTitle}</div>}
+          <div className="text-sm text-gray-500">{currentIdx + 1} / {quizQuestions.length}</div>
+        </div>
         {mode === 'exam' && (
           <div className={cn('flex items-center gap-1 font-mono font-bold', timeLeft < 300 ? 'text-red-600' : 'text-gray-700')}>
             <Timer className="w-4 h-4" />
