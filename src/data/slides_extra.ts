@@ -2020,6 +2020,7 @@ A（0.9）とB（0.9）が並列で、その結果とC（0.8）が直列の場�
       'q-mng-011', 'q-mng-012', 'q-mng-013', 'q-mng-014',
       'q-mng-015', 'q-mng-016', 'q-mng-017', 'q-mng-018',
       'q-mng-053', 'q-mng-054', 'q-mng-055', 'q-mng-068',
+      'q-nt-mng-006',
     ],
     sections: [
       {
@@ -2053,9 +2054,9 @@ PV＝50万（計画値）、EV＝40万（出来高）、AC＝60万（実績コ�
           'SPI = EV÷PV（1.0未満＝遅延）、CPI = EV÷AC（1.0未満＝コスト超過）',
           'ガントチャートは進捗見える化、PERT図はクリティカルパス特定に使う',
         ],
-        keywords: ['ガントチャート', 'EVM', 'SPI', 'PERT', 'クリティカルパス'],
-        relatedQuestionIds: ['q-mng-011', 'q-mng-012', 'q-mng-013'],
-        relatedGlossaryIds: ['g-critical-path', 'g-evm'],
+        keywords: ['ガントチャート', 'EVM', 'SPI', 'PERT', 'クリティカルパス', 'アローダイアグラム'],
+        relatedQuestionIds: ['q-mng-011', 'q-mng-012', 'q-mng-013', 'q-nt-mng-006'],
+        relatedGlossaryIds: ['g-critical-path', 'g-evm', 'g-arrow-diagram', 'g-gantt'],
       },
       {
         id: 'slide-management-04-s2',
@@ -2137,6 +2138,7 @@ PERT三点見積りの計算式（楽観＋4×最頻＋悲観）÷6は必ず覚�
       'q-mng-020', 'q-mng-021', 'q-mng-023', 'q-mng-025',
       'q-mng-044', 'q-mng-045', 'q-mng-046', 'q-mng-056', 'q-mng-057',
       'q-mng-060', 'q-mng-065', 'q-mng-066',
+      'q-nt-mng-003', 'q-nt-mng-004', 'q-nt-mng-005',
     ],
     sections: [
       {
@@ -2167,8 +2169,8 @@ PERT三点見積りの計算式（楽観＋4×最頻＋悲観）÷6は必ず覚�
           'ホワイトボックステストは内部のロジック（if分岐・ループ）を把握して設計する',
         ],
         keywords: ['同値分割', '境界値分析', 'ブラックボックステスト', 'ホワイトボックステスト'],
-        relatedQuestionIds: ['q-mng-020', 'q-mng-021', 'q-mng-023'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-mng-020', 'q-mng-021', 'q-mng-023', 'q-nt-mng-003', 'q-nt-mng-004'],
+        relatedGlossaryIds: ['g-blackbox-test', 'g-whitebox-test'],
       },
       {
         id: 'slide-management-05-s2',
@@ -2198,7 +2200,7 @@ TDDは「テストコードを先に書く」という点が特徴的です。�
         ],
         keywords: ['TDD', 'ペアプログラミング', '受入テスト', '回帰テスト'],
         relatedQuestionIds: ['q-mng-025', 'q-mng-046', 'q-mng-056', 'q-mng-057'],
-        relatedGlossaryIds: [],
+        relatedGlossaryIds: ['g-regression-test'],
       },
       {
         id: 'slide-management-05-s3',
@@ -2233,8 +2235,8 @@ TDDは「テストコードを先に書く」という点が特徴的です。�
           '高凝集・疎結合は保守性の高いソフトウェア設計の原則',
         ],
         keywords: ['ウォークスルー', 'インスペクション', 'テスト終了基準', '保守性', '欠陥修正コスト'],
-        relatedQuestionIds: ['q-mng-044', 'q-mng-045', 'q-mng-060', 'q-mng-066'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-mng-044', 'q-mng-045', 'q-mng-060', 'q-mng-066', 'q-nt-mng-005'],
+        relatedGlossaryIds: ['g-inspection', 'g-walkthrough'],
       },
     ],
   },
@@ -2248,6 +2250,7 @@ TDDは「テストコードを先に書く」という点が特徴的です。�
     quizQuestionIds: [
       'q-mng-019', 'q-mng-022', 'q-mng-024', 'q-mng-040',
       'q-mng-041', 'q-mng-042', 'q-mng-043', 'q-mng-067',
+      'q-nt-mng-001', 'q-nt-mng-002', 'q-nt-mng-007', 'q-nt-mng-012',
     ],
     sections: [
       {
@@ -2284,8 +2287,8 @@ TDDは「テストコードを先に書く」という点が特徴的です。�
           'スパイラルモデルはリスク分析を各サイクルで行うことが最大の特徴',
         ],
         keywords: ['スクラム', 'バックログ', 'リファインメント', 'プロトタイプ', 'スパイラルモデル'],
-        relatedQuestionIds: ['q-mng-019', 'q-mng-022', 'q-mng-024'],
-        relatedGlossaryIds: ['g-scrum'],
+        relatedQuestionIds: ['q-mng-019', 'q-mng-022', 'q-mng-024', 'q-nt-mng-001', 'q-nt-mng-002'],
+        relatedGlossaryIds: ['g-scrum', 'g-agile', 'g-spiral', 'g-prototype'],
       },
       {
         id: 'slide-management-06-s2',
@@ -2355,8 +2358,8 @@ ISO/IEC 25010は「ソフトウェア品質の評価規格」です。CMM/CMMI�
           'CI/CDによってバグの早期発見・高頻度のリリースが可能になる',
         ],
         keywords: ['ファンクションポイント', 'CI', '継続的インテグレーション', 'DevOps'],
-        relatedQuestionIds: ['q-mng-043', 'q-mng-067'],
-        relatedGlossaryIds: ['g-devops'],
+        relatedQuestionIds: ['q-mng-043', 'q-mng-067', 'q-nt-mng-007', 'q-nt-mng-012'],
+        relatedGlossaryIds: ['g-devops', 'g-fp', 'g-ci-cd'],
       },
     ],
   },
@@ -2371,6 +2374,7 @@ ISO/IEC 25010は「ソフトウェア品質の評価規格」です。CMM/CMMI�
       'q-mng-026', 'q-mng-027', 'q-mng-028', 'q-mng-029', 'q-mng-030',
       'q-mng-031', 'q-mng-032', 'q-mng-033', 'q-mng-050', 'q-mng-058',
       'q-mng-059', 'q-mng-062', 'q-mng-069',
+      'q-nt-mng-008', 'q-nt-mng-010',
     ],
     sections: [
       {
@@ -2403,8 +2407,8 @@ RFC（Request For Change）：変更の要求書。CABへの申請書類。
           'サービスデスクはユーザーからの問い合わせを一元的に受け付けるSPOC（窓口）',
         ],
         keywords: ['ITIL', 'インシデント管理', '問題管理', '変更管理', 'CAB', 'サービスデスク'],
-        relatedQuestionIds: ['q-mng-026', 'q-mng-029', 'q-mng-032', 'q-mng-059'],
-        relatedGlossaryIds: ['g-itil'],
+        relatedQuestionIds: ['q-mng-026', 'q-mng-029', 'q-mng-032', 'q-mng-059', 'q-nt-mng-010'],
+        relatedGlossaryIds: ['g-itil', 'g-incident', 'g-change-management', 'g-servicedesk'],
       },
       {
         id: 'slide-management-07-s2',
@@ -2471,8 +2475,8 @@ SLAは「数値で取り決めた合意文書」、SLMはその「管理活動�
           'BCPは災害・障害発生時に事業を継続するための事前計画',
         ],
         keywords: ['SLA', 'SLM', 'BCP', 'RTO', 'RPO', 'サービスカタログ'],
-        relatedQuestionIds: ['q-mng-031', 'q-mng-050', 'q-mng-062', 'q-mng-069'],
-        relatedGlossaryIds: ['g-sla'],
+        relatedQuestionIds: ['q-mng-031', 'q-mng-050', 'q-mng-062', 'q-mng-069', 'q-nt-mng-008'],
+        relatedGlossaryIds: ['g-sla', 'g-bcp', 'g-rto-rpo'],
       },
     ],
   },
@@ -2486,6 +2490,7 @@ SLAは「数値で取り決めた合意文書」、SLMはその「管理活動�
     quizQuestionIds: [
       'q-mng-034', 'q-mng-035', 'q-mng-036', 'q-mng-037',
       'q-mng-038', 'q-mng-039', 'q-mng-063', 'q-mng-064', 'q-mng-070',
+      'q-nt-mng-009', 'q-nt-mng-011',
     ],
     sections: [
       {
@@ -2560,8 +2565,8 @@ J-SOXは上場企業に義務付けられた内部統制報告制度です。職
           '職務分離は同一人物が複数の重要業務を担当しないことで不正を防ぐ原則',
         ],
         keywords: ['内部統制', 'J-SOX', '職務分離', 'IT全般統制'],
-        relatedQuestionIds: ['q-mng-035', 'q-mng-038', 'q-mng-063', 'q-mng-070'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-mng-035', 'q-mng-038', 'q-mng-063', 'q-mng-070', 'q-nt-mng-011'],
+        relatedGlossaryIds: ['g-internal-control'],
       },
       {
         id: 'slide-management-08-s3',
@@ -2596,8 +2601,8 @@ ITガバナンスは「経営レベルのIT統治」、IT管理は「日常的�
           '監査調書は監査の実施内容・証拠・判断を記録した公式文書',
         ],
         keywords: ['ITガバナンス', 'COBIT', 'ペネトレーションテスト', '監査調書'],
-        relatedQuestionIds: ['q-mng-037', 'q-mng-039', 'q-mng-064'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-mng-037', 'q-mng-039', 'q-mng-064', 'q-nt-mng-009'],
+        relatedGlossaryIds: ['g-isms'],
       },
     ],
   },
