@@ -393,7 +393,7 @@ GPLは「コピーレフト条項あり」＝改変・配布した場合は同�
     category: 'プロジェクトマネジメント',
     title: 'プロジェクトマネジメント',
     order: 4,
-    quizQuestionIds: ['q-mng-001', 'q-mng-002', 'q-mng-003', 'q-mng-004'],
+    quizQuestionIds: ['q-mng-001', 'q-mng-002', 'q-mng-003', 'q-mng-004', 'q-mng-011', 'q-mng-012', 'q-mng-013', 'q-mng-014', 'q-mng-015', 'q-mng-016', 'q-mng-017', 'q-mng-018', 'q-mng-068'],
     sections: [
       {
         id: 'slide-management-01-s1',
@@ -429,8 +429,8 @@ WBSは「作業を階層的に分解した構造図」であり、スケジュ�
           'PMBOKはPMIが策定したプロジェクト管理の知識体系',
         ],
         keywords: ['WBS', 'PMBOK', 'プロジェクト管理', 'スコープ'],
-        relatedQuestionIds: ['q-mng-001'],
-        relatedGlossaryIds: ['g-wbs'],
+        relatedQuestionIds: ['q-mng-001', 'q-mng-013', 'q-mng-015', 'q-mng-016'],
+        relatedGlossaryIds: ['g-wbs', 'g-gantt', 'g-arrow-diagram'],
       },
       {
         id: 'slide-management-01-s2',
@@ -466,8 +466,8 @@ A→B→Dのルートが10日、A→C→Dのルートが14日のプロジェク�
           'ガントチャートは進捗管理、PERT図は依存関係・クリティカルパス把握に有効',
         ],
         keywords: ['クリティカルパス', 'ガントチャート', 'PERT', 'フロート'],
-        relatedQuestionIds: ['q-mng-002'],
-        relatedGlossaryIds: ['g-critical-path'],
+        relatedQuestionIds: ['q-mng-002', 'q-mng-011', 'q-mng-013'],
+        relatedGlossaryIds: ['g-critical-path', 'g-arrow-diagram', 'g-gantt'],
       },
       {
         id: 'slide-management-01-s3',
@@ -505,8 +505,28 @@ CPI＝EV÷AC、SPI＝EV÷PVの計算式を覚えましょう。「1.0未満＝�
           'リスク対応4戦略：回避・軽減・転嫁・受容',
         ],
         keywords: ['EVM', 'CPI', 'SPI', 'リスク管理'],
-        relatedQuestionIds: ['q-mng-003', 'q-mng-004'],
-        relatedGlossaryIds: ['g-evm'],
+        relatedQuestionIds: ['q-mng-003', 'q-mng-004', 'q-mng-012', 'q-mng-014', 'q-mng-017', 'q-mng-018', 'q-mng-068'],
+        relatedGlossaryIds: ['g-evm', 'g-risk-management'],
+      },
+    ],
+    comparisons: [
+      {
+        title: 'プロジェクト管理ツールの比較',
+        headers: ['ツール', '表現形式', '主な用途', '強み'],
+        rows: [
+          ['WBS', '階層的なツリー構造', '作業の洗い出し・スコープ定義', '抜け漏れを防ぎ、工数見積もりの基礎になる'],
+          ['ガントチャート', '横棒グラフ（横軸＝時間）', 'スケジュール管理・進捗の可視化', '直感的でわかりやすい。日程管理に最適'],
+          ['PERT図（アローダイアグラム）', '矢印ネットワーク図', 'クリティカルパスの特定・作業依存関係の把握', '最長経路と余裕時間を定量的に把握できる'],
+          ['EVM（アーンドバリュー管理）', '数値指標（CPI・SPI）', 'コストとスケジュールの統合的な進捗測定', '計画と実績のずれを定量的に管理できる'],
+        ],
+      },
+      {
+        title: 'EVM指標の解釈',
+        headers: ['指標', '計算式', '1.0より大', '1.0に等しい', '1.0より小'],
+        rows: [
+          ['CPI（コスト効率指数）', 'EV ÷ AC', '予算内で進んでいる（効率良好）', '計画通り', 'コスト超過（予算オーバー）'],
+          ['SPI（スケジュール効率指数）', 'EV ÷ PV', '前倒しで進んでいる', '計画通り', '遅延（スケジュール超過）'],
+        ],
       },
     ],
   },
@@ -516,7 +536,7 @@ CPI＝EV÷AC、SPI＝EV÷PVの計算式を覚えましょう。「1.0未満＝�
     category: 'システム開発手法',
     title: 'システム開発手法',
     order: 5,
-    quizQuestionIds: ['q-mng-005', 'q-mng-006', 'q-mng-007'],
+    quizQuestionIds: ['q-mng-005', 'q-mng-006', 'q-mng-007', 'q-mng-019', 'q-mng-020', 'q-mng-021', 'q-mng-022', 'q-mng-023', 'q-mng-024', 'q-mng-025', 'q-mng-057', 'q-mng-067'],
     sections: [
       {
         id: 'slide-management-02-s1',
@@ -554,8 +574,8 @@ CPI＝EV÷AC、SPI＝EV÷PVの計算式を覚えましょう。「1.0未満＝�
           'プロトタイプで早期にユーザーの合意を得て要件の曖昧さを解消',
         ],
         keywords: ['ウォーターフォール', 'スパイラルモデル', 'プロトタイプ'],
-        relatedQuestionIds: ['q-mng-006'],
-        relatedGlossaryIds: ['g-waterfall'],
+        relatedQuestionIds: ['q-mng-006', 'q-mng-022', 'q-mng-024'],
+        relatedGlossaryIds: ['g-waterfall', 'g-spiral', 'g-prototype', 'g-agile'],
       },
       {
         id: 'slide-management-02-s2',
@@ -596,8 +616,8 @@ CPI＝EV÷AC、SPI＝EV÷PVの計算式を覚えましょう。「1.0未満＝�
           'スクラムマスターはチームの障害を除去するファシリテーター（開発はしない）',
         ],
         keywords: ['アジャイル', 'スクラム', 'スプリント', 'XP'],
-        relatedQuestionIds: ['q-mng-005'],
-        relatedGlossaryIds: ['g-scrum'],
+        relatedQuestionIds: ['q-mng-005', 'q-mng-019', 'q-mng-057'],
+        relatedGlossaryIds: ['g-scrum', 'g-agile'],
       },
       {
         id: 'slide-management-02-s3',
@@ -635,8 +655,32 @@ ECサイトの機能追加フロー（CI/CD）：
           'CIはコード変更のたびに自動でビルド・テストを実行する仕組み',
         ],
         keywords: ['DevOps', 'CI/CD', 'Docker', 'テスト'],
-        relatedQuestionIds: ['q-mng-007'],
-        relatedGlossaryIds: ['g-devops'],
+        relatedQuestionIds: ['q-mng-007', 'q-mng-020', 'q-mng-021', 'q-mng-023', 'q-mng-025', 'q-mng-067'],
+        relatedGlossaryIds: ['g-devops', 'g-ci-cd', 'g-regression-test', 'g-whitebox-test', 'g-blackbox-test'],
+      },
+    ],
+    comparisons: [
+      {
+        title: 'テストの段階と目的',
+        headers: ['テスト段階', '対象範囲', '主な目的', '担当'],
+        rows: [
+          ['単体テスト（ユニットテスト）', '個々のモジュール・関数', '部品単体の動作・ロジック確認', '開発者'],
+          ['結合テスト（統合テスト）', '複数モジュールの連携', 'インターフェース・データ受け渡しの確認', '開発者・テスト担当'],
+          ['システムテスト', 'システム全体', '要件定義書通りに動くか・性能・セキュリティ', 'テスト担当'],
+          ['受け入れテスト（UAT）', 'システム全体', 'ユーザーが実際に使って合否を最終判断', 'ユーザー・発注者'],
+          ['回帰テスト（リグレッション）', '修正後のシステム全体', '修正によって他機能が壊れていないか確認', '開発者・テスト担当'],
+        ],
+      },
+      {
+        title: 'テスト技法の比較（ブラックボックス vs ホワイトボックス）',
+        headers: ['項目', 'ブラックボックステスト', 'ホワイトボックステスト'],
+        rows: [
+          ['視点', '外部（入力と出力だけを見る）', '内部（コード・ロジックを見る）'],
+          ['内部構造の知識', '不要', '必要'],
+          ['主な技法', '同値分割・境界値分析', '命令網羅・分岐網羅・条件網羅'],
+          ['利用フェーズ', 'システムテスト・受け入れテストに多い', '単体テスト・結合テストに多い'],
+          ['担当者', 'ユーザー・テスト専門担当', '開発者'],
+        ],
       },
     ],
   },
@@ -646,7 +690,7 @@ ECサイトの機能追加フロー（CI/CD）：
     category: 'サービスマネジメント',
     title: 'サービスマネジメント',
     order: 6,
-    quizQuestionIds: ['q-mng-008', 'q-mng-009', 'q-mng-010'],
+    quizQuestionIds: ['q-mng-008', 'q-mng-009', 'q-mng-010', 'q-mng-026', 'q-mng-027', 'q-mng-028', 'q-mng-029', 'q-mng-030', 'q-mng-031', 'q-mng-032', 'q-mng-033', 'q-mng-058', 'q-mng-059', 'q-mng-062', 'q-mng-069'],
     sections: [
       {
         id: 'slide-management-03-s1',
@@ -682,8 +726,8 @@ ECサイトの機能追加フロー（CI/CD）：
           '変更管理：CAB（変更諮問委員会）が変更の承認を行う',
         ],
         keywords: ['ITIL', 'インシデント管理', '問題管理', '変更管理'],
-        relatedQuestionIds: ['q-mng-008'],
-        relatedGlossaryIds: ['g-itil'],
+        relatedQuestionIds: ['q-mng-008', 'q-mng-026', 'q-mng-029', 'q-mng-032', 'q-mng-059'],
+        relatedGlossaryIds: ['g-itil', 'g-incident', 'g-change-management', 'g-servicedesk'],
       },
       {
         id: 'slide-management-03-s2',
@@ -720,8 +764,31 @@ ECサイトの機能追加フロー（CI/CD）：
           '並列接続：稼働率 = 1 − (1−A)(1−B)（どちらか1つでOK）',
         ],
         keywords: ['SLA', '稼働率', 'MTBF', 'MTTR'],
-        relatedQuestionIds: ['q-mng-009', 'q-mng-010'],
-        relatedGlossaryIds: ['g-sla', 'g-availability'],
+        relatedQuestionIds: ['q-mng-009', 'q-mng-010', 'q-mng-027', 'q-mng-028', 'q-mng-030', 'q-mng-031', 'q-mng-033', 'q-mng-058', 'q-mng-062', 'q-mng-069'],
+        relatedGlossaryIds: ['g-sla', 'g-availability', 'g-bcp', 'g-rto-rpo'],
+      },
+    ],
+    comparisons: [
+      {
+        title: 'ITILの主要プロセス比較',
+        headers: ['プロセス', '目的', 'キーワード', '試験のポイント'],
+        rows: [
+          ['インシデント管理', 'ITサービスを迅速に復旧', '応急処置・スピード重視', '根本原因は「問わない」のがポイント'],
+          ['問題管理', 'インシデントの根本原因を除去・再発防止', 'RCA（根本原因分析）・恒久対策', 'インシデント管理の後工程として実施'],
+          ['変更管理', 'システム変更によるリスクを最小化', 'CAB（変更諮問委員会）・承認プロセス', 'CABが変更の可否を審査・承認する'],
+          ['構成管理', 'IT資産（CI）の状態を管理', 'CMDB（構成管理データベース）', '誰が何を持っているか一元管理する'],
+          ['リリース管理', '変更を安全に本番環境へ展開', 'テスト済み・段階的リリース', '変更管理と連動して実施する'],
+        ],
+      },
+      {
+        title: '稼働率計算パターンまとめ',
+        headers: ['パターン', '計算式', '例（A=0.9, B=0.8）', '結果'],
+        rows: [
+          ['基本稼働率', 'MTBF ÷（MTBF + MTTR）', 'MTBF=900h, MTTR=100h', '900÷1000 = 0.9'],
+          ['直列接続', 'A × B', '0.9 × 0.8', '0.72（低下する）'],
+          ['並列接続', '1 − (1−A)(1−B)', '1 − 0.1×0.2', '0.98（向上する）'],
+          ['並列→直列の複合', '並列部分を先に計算→直列の積', '並列部分0.98 × C=0.99', '0.98×0.99≒0.97'],
+        ],
       },
     ],
   },
