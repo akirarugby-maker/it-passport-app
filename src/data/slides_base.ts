@@ -8,7 +8,7 @@ export const slidesBase: Slide[] = [
     category: '経営戦略・企業活動',
     title: '経営戦略・企業活動',
     order: 1,
-    quizQuestionIds: ['q-str-001', 'q-str-002', 'q-str-003', 'q-str-004', 'q-str-005'],
+    quizQuestionIds: ['q-str-001', 'q-str-002', 'q-str-003', 'q-str-004', 'q-str-005', 'q-str-014', 'q-str-015', 'q-str-016', 'q-str-017', 'q-str-021', 'q-str-022', 'q-str-058', 'q-str-064', 'q-str-067'],
     sections: [
       {
         id: 'slide-strategy-01-s1',
@@ -39,8 +39,8 @@ SWOT分析の「強み・弱み」は自社の内部要因、「機会・脅威�
           'コアコンピタンス＝他社が真似できない自社の中核的な強み',
         ],
         keywords: ['経営戦略', 'コアコンピタンス', '競争優位'],
-        relatedQuestionIds: ['q-str-001', 'q-str-003'],
-        relatedGlossaryIds: ['g-swot', 'g-core-competence'],
+        relatedQuestionIds: ['q-str-001', 'q-str-003', 'q-str-014', 'q-str-015', 'q-str-016', 'q-str-017', 'q-str-064'],
+        relatedGlossaryIds: ['g-swot', 'g-core-competence', 'g-ppm', 'g-value-chain', 'g-ansoff'],
       },
       {
         id: 'slide-strategy-01-s2',
@@ -77,7 +77,7 @@ SWOT分析の「強み・弱み」は自社の内部要因、「機会・脅威�
           'SO戦略が4戦略の中で最も積極的・成長志向',
         ],
         keywords: ['SWOT分析', 'SO戦略', 'クロスSWOT'],
-        relatedQuestionIds: ['q-str-001'],
+        relatedQuestionIds: ['q-str-001', 'q-str-022'],
         relatedGlossaryIds: ['g-swot'],
       },
       {
@@ -114,8 +114,30 @@ PPMの4象限の名称（花形・金のなる木・問題児・負け犬）と�
           'BSCは財務・顧客・内部プロセス・学習と成長の4視点でKPIを設定',
         ],
         keywords: ['PPM', 'BSC', 'バランスト・スコアカード', 'KPI'],
-        relatedQuestionIds: ['q-str-002', 'q-str-004'],
-        relatedGlossaryIds: ['g-bsc'],
+        relatedQuestionIds: ['q-str-002', 'q-str-004', 'q-str-021'],
+        relatedGlossaryIds: ['g-bsc', 'g-ppm'],
+      },
+    ],
+    comparisons: [
+      {
+        title: 'クロスSWOT分析の4戦略',
+        headers: ['戦略', '組み合わせ', '方針', '具体例'],
+        rows: [
+          ['SO戦略（積極拡大）', '強み × 機会', '強みを最大限活かして機会に乗る（最も積極的）', '自社の高技術力×新興国市場拡大→海外展開'],
+          ['WO戦略（弱点克服）', '弱み × 機会', '弱みを補強して機会を活かす', 'DX不足×デジタル化の波→IT投資で強化'],
+          ['ST戦略（差別化）', '強み × 脅威', '強みを活かして脅威を回避・乗り越える', '高ブランド力×新規参入増→ブランド強化で差別化'],
+          ['WT戦略（防衛・撤退）', '弱み × 脅威', '最悪の事態を防ぎ傷を最小化（最も守り）', 'コスト高×市場縮小→事業撤退・リストラ検討'],
+        ],
+      },
+      {
+        title: 'アンゾフの成長マトリクス（4つの成長戦略）',
+        headers: ['戦略', '市場', '製品', '特徴・リスク'],
+        rows: [
+          ['市場浸透戦略', '既存市場', '既存製品', 'リスク最小。広告強化・価格改定で既存顧客のシェア拡大'],
+          ['市場開拓戦略', '新規市場', '既存製品', '既存製品を新地域・新顧客層へ展開。海外進出など'],
+          ['製品開発戦略', '既存市場', '新製品', '既存顧客に新製品を提供。R&D投資が必要'],
+          ['多角化戦略', '新規市場', '新製品', 'リスク最大。まったく新しい事業領域への参入'],
+        ],
       },
     ],
   },
@@ -125,7 +147,7 @@ PPMの4象限の名称（花形・金のなる木・問題児・負け犬）と�
     category: '法務・知的財産権',
     title: '法務・知的財産権',
     order: 2,
-    quizQuestionIds: ['q-str-007', 'q-str-008', 'q-str-009', 'q-str-010'],
+    quizQuestionIds: ['q-str-007', 'q-str-008', 'q-str-009', 'q-str-010', 'q-str-024', 'q-str-025', 'q-str-026', 'q-str-027', 'q-str-028', 'q-str-029'],
     sections: [
       {
         id: 'slide-strategy-02-s1',
@@ -156,8 +178,8 @@ PPMの4象限の名称（花形・金のなる木・問題児・負け犬）と�
           '特許権の保護期間は出願から20年',
         ],
         keywords: ['著作権', '特許権', '知的財産権', '産業財産権'],
-        relatedQuestionIds: ['q-str-007', 'q-str-008'],
-        relatedGlossaryIds: ['g-copyright'],
+        relatedQuestionIds: ['q-str-007', 'q-str-008', 'q-str-024', 'q-str-025'],
+        relatedGlossaryIds: ['g-copyright', 'g-patent', 'g-utility-model', 'g-trademark'],
       },
       {
         id: 'slide-strategy-02-s2',
@@ -187,8 +209,8 @@ PPMの4象限の名称（花形・金のなる木・問題児・負け犬）と�
           '電子署名は紙の署名と同等の法的効力を持つ',
         ],
         keywords: ['個人情報保護法', '個人情報', '営業秘密', '電子署名'],
-        relatedQuestionIds: ['q-str-009'],
-        relatedGlossaryIds: ['g-personal-info'],
+        relatedQuestionIds: ['q-str-009', 'q-str-026', 'q-str-027', 'q-str-028'],
+        relatedGlossaryIds: ['g-personal-info', 'g-unfair-competition', 'g-gdpr'],
       },
       {
         id: 'slide-strategy-02-s3',
@@ -225,8 +247,32 @@ GPLは「コピーレフト条項あり」＝改変・配布した場合は同�
           'ISO27001は情報セキュリティマネジメントの国際規格',
         ],
         keywords: ['OSS', 'GPL', 'MIT License', 'ISO', '標準化'],
-        relatedQuestionIds: ['q-str-010'],
+        relatedQuestionIds: ['q-str-010', 'q-str-029'],
         relatedGlossaryIds: ['g-oss'],
+      },
+    ],
+    comparisons: [
+      {
+        title: 'IT関連法規の比較',
+        headers: ['法律', '目的', '保護対象・規制内容', '試験のポイント'],
+        rows: [
+          ['個人情報保護法', '個人情報の適切な取り扱い', '生存する個人を識別できる情報', '死者の情報は対象外。取得目的の明示が必要'],
+          ['不正競争防止法', '公正な競争の確保', '営業秘密（秘密管理性・有用性・非公知性）', '3要件すべてを満たす必要がある'],
+          ['電子署名法', '電子契約の法的効力確保', '電子署名に書面署名と同等の効力', '電子署名＝紙の署名と同じ法的効力'],
+          ['プロバイダ責任制限法', 'ネット上の権利侵害への対応', '発信者情報の開示・削除手続き', 'SNS誹謗中傷時に発信者情報開示を請求できる'],
+          ['著作権法', '著作物の保護', '文章・プログラム・音楽・映像など', '登録不要・創作時点で自動発生'],
+        ],
+      },
+      {
+        title: 'OSSライセンスの比較',
+        headers: ['ライセンス', 'コピーレフト', '商用利用', '改変・配布時の条件', '特徴'],
+        rows: [
+          ['GPL', 'あり（強い）', '可', '改変物もGPLで公開必須', 'Linux採用。最もコピーレフトが強い'],
+          ['LGPL', 'あり（弱い）', '可', 'ライブラリ部分のみLGPL公開', 'ライブラリとしてのリンクには制約なし'],
+          ['MIT', 'なし', '自由', '著作権表示のみ必要', '最も自由度が高い。商用製品に組み込みやすい'],
+          ['Apache 2.0', 'なし', '自由', '著作権表示・変更点明示', '特許ライセンスの明示的許諾あり'],
+          ['BSD', 'なし', '自由', '著作権表示のみ', 'MITに近い。FreeBSD・macOSのベースに使用'],
+        ],
       },
     ],
   },
@@ -236,7 +282,7 @@ GPLは「コピーレフト条項あり」＝改変・配布した場合は同�
     category: 'マーケティング・財務',
     title: 'マーケティング・財務',
     order: 3,
-    quizQuestionIds: ['q-str-011', 'q-str-012', 'q-str-013'],
+    quizQuestionIds: ['q-str-011', 'q-str-012', 'q-str-013', 'q-str-030', 'q-str-031', 'q-str-032', 'q-str-033', 'q-str-034', 'q-str-035', 'q-str-051', 'q-str-052', 'q-str-053', 'q-str-054', 'q-str-060', 'q-str-065', 'q-str-068'],
     sections: [
       {
         id: 'slide-strategy-03-s1',
@@ -273,8 +319,8 @@ GPLは「コピーレフト条項あり」＝改変・配布した場合は同�
           'CRMは顧客情報を活用してLTV（顧客生涯価値）を高める仕組み',
         ],
         keywords: ['4P', 'マーケティングミックス', 'STP', 'CRM'],
-        relatedQuestionIds: ['q-str-011'],
-        relatedGlossaryIds: ['g-4p'],
+        relatedQuestionIds: ['q-str-011', 'q-str-030', 'q-str-034', 'q-str-035', 'q-str-054', 'q-str-060'],
+        relatedGlossaryIds: ['g-4p', 'g-4c', 'g-crm', 'g-abc-analysis'],
       },
       {
         id: 'slide-strategy-03-s2',
@@ -311,8 +357,31 @@ GPLは「コピーレフト条項あり」＝改変・配布した場合は同�
           '流動比率 = 流動資産 ÷ 流動負債 × 100（200%以上が理想）',
         ],
         keywords: ['損益分岐点', 'BEP', 'ROI', '損益計算書'],
-        relatedQuestionIds: ['q-str-012', 'q-str-013'],
+        relatedQuestionIds: ['q-str-012', 'q-str-013', 'q-str-031', 'q-str-032', 'q-str-033', 'q-str-051', 'q-str-052', 'q-str-053'],
         relatedGlossaryIds: ['g-bep', 'g-roi'],
+      },
+    ],
+    comparisons: [
+      {
+        title: 'プロダクトライフサイクルの4段階',
+        headers: ['段階', '市場の状態', '売上・利益', '企業の戦略'],
+        rows: [
+          ['導入期', '認知度低・競合少ない', '売上低・利益マイナスが多い', '広告宣伝費を大きく投入して認知拡大'],
+          ['成長期', '急速に市場拡大・競合参入', '売上急増・利益増加', 'シェア確保のため積極的な設備投資・販促'],
+          ['成熟期', '市場が飽和・競合激化', '売上は高いが利益率低下', 'コスト削減・差別化・既存顧客のLTV向上'],
+          ['衰退期', '市場縮小・競合撤退', '売上・利益ともに減少', '撤退・リポジショニング・新市場へ転換検討'],
+        ],
+      },
+      {
+        title: '主要財務指標の比較',
+        headers: ['指標', '計算式', '意味', '良い値の目安'],
+        rows: [
+          ['損益分岐点売上高', '固定費 ÷（1 − 変動費率）', '利益がゼロになる最低売上高', '現在の売上高より低いほど良い'],
+          ['ROI（投資対効果）', '（利益 ÷ 投資額）× 100', '投資効率を表す指標', '高いほど効率が良い（業界平均比較）'],
+          ['ROE（自己資本利益率）', '当期純利益 ÷ 自己資本 × 100', '株主資本をどれだけ効率よく活用したか', '10%以上が一般的な目安'],
+          ['流動比率', '流動資産 ÷ 流動負債 × 100', '短期の支払い能力（安全性）', '200%以上が理想、100%以上が最低ライン'],
+          ['粗利益率', '（売上総利益 ÷ 売上高）× 100', '商品・サービスの本来の収益性', '業種により異なるが高いほど良い'],
+        ],
       },
     ],
   },
