@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, BookMarked, ArrowLeft, ExternalLink, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, BookMarked, ArrowLeft, ExternalLink, X, ChevronDown, ChevronUp, Clapperboard } from 'lucide-react';
 import { Card, CardBody } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { RepetitionBadge } from '@/components/ui/RepetitionBadge';
@@ -189,7 +189,7 @@ export const GlossaryPage = () => {
                     </div>
                   )}
 
-                  <div className="mt-4 flex gap-2">
+                  <div className="mt-4 flex gap-2 flex-wrap">
                     {termDetail.relatedSlideId && (
                       <Button
                         variant="secondary"
@@ -211,6 +211,15 @@ export const GlossaryPage = () => {
                         関連問題を解く
                       </Button>
                     )}
+                    <a
+                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`ITパスポート ${termDetail.term}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-xs text-red-600 hover:text-red-800 border border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors bg-white"
+                    >
+                      <Clapperboard className="w-3.5 h-3.5" />
+                      YouTube検索
+                    </a>
                   </div>
                 </div>
               )}

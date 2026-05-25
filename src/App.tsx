@@ -5,7 +5,7 @@ import { HomePage } from './pages/HomePage';
 import { SlidesPage } from './pages/SlidesPage';
 import { SlideDetailPage } from './pages/SlideDetailPage';
 import { QuizPage } from './pages/QuizPage';
-import { RecordsPage } from './pages/RecordsPage';
+import { WeakPage } from './pages/WeakPage';
 import { GlossaryPage } from './pages/GlossaryPage';
 
 const ScrollToTop = () => {
@@ -24,7 +24,7 @@ function App() {
           <Route path="/slides" element={<SlidesPage />} />
           <Route path="/slides/:slideId" element={<SlideDetailPage />} />
           <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/records" element={<RecordsPage />} />
+          <Route path="/weak" element={<WeakPage />} />
           <Route path="/glossary" element={<GlossaryPage />} />
         </Route>
       </Routes>
