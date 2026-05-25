@@ -2,6 +2,7 @@ import type { Question } from '@/types';
 import { strategyQuestionsExtra } from './questions_strategy_extra';
 import { managementQuestionsExtra } from './questions_management_extra';
 import { technologyQuestionsExtra } from './questions_technology_extra';
+import { questionsNewTerms } from './questions_new_terms';
 
 const baseQuestions: Question[] = [
   // ========== ストラテジ系 ==========
@@ -774,6 +775,7 @@ export const questions: Question[] = [
   ...strategyQuestionsExtra,
   ...managementQuestionsExtra,
   ...technologyQuestionsExtra,
+  ...questionsNewTerms,
 ];
 
 export const getQuestionsByDomain = (domain: string) =>
