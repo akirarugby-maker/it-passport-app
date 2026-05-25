@@ -772,6 +772,7 @@ NLPは「人間の言葉をコンピュータが理解・生成する」技術�
     quizQuestionIds: [
       'q-tech-021', 'q-tech-022', 'q-tech-023', 'q-tech-024',
       'q-tech-025', 'q-tech-026', 'q-tech-027', 'q-tech-028',
+      'q-nt-tech-012', 'q-nt-tech-013',
     ],
     sections: [
       {
@@ -809,8 +810,8 @@ NLPは「人間の言葉をコンピュータが理解・生成する」技術�
           '16進数：A=10, B=11, C=12, D=13, E=14, F=15 として計算する',
         ],
         keywords: ['2進数', '10進数', '16進数', '数値変換'],
-        relatedQuestionIds: ['q-tech-021', 'q-tech-022', 'q-tech-023'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-021', 'q-tech-022', 'q-tech-023', 'q-nt-tech-012'],
+        relatedGlossaryIds: ['g-binary'],
       },
       {
         id: 'slide-technology-05-s2',
@@ -891,8 +892,8 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
           '2の補数の求め方：ビットを反転して1を加える',
         ],
         keywords: ['浮動小数点', '補数', '2の補数'],
-        relatedQuestionIds: ['q-tech-026', 'q-tech-028'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-026', 'q-tech-028', 'q-nt-tech-013'],
+        relatedGlossaryIds: ['g-complement', 'g-binary'],
       },
     ],
   },
@@ -1029,7 +1030,7 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
     category: 'プログラミング基礎・UML',
     title: 'プログラミング基礎・UML',
     order: 26,
-    quizQuestionIds: ['q-tech-036', 'q-tech-037', 'q-tech-038', 'q-tech-039', 'q-tech-040'],
+    quizQuestionIds: ['q-tech-036', 'q-tech-037', 'q-tech-038', 'q-tech-039', 'q-tech-040', 'q-nt-tech-020'],
     sections: [
       {
         id: 'slide-technology-07-s1',
@@ -1059,8 +1060,8 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
           'ポリモーフィズム：同じメソッド名を呼んでも異なるオブジェクトで異なる動作をする',
         ],
         keywords: ['オブジェクト指向', 'OOP', 'カプセル化', 'ポリモーフィズム', '継承'],
-        relatedQuestionIds: ['q-tech-036', 'q-tech-037'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-036', 'q-tech-037', 'q-nt-tech-020'],
+        relatedGlossaryIds: ['g-oop'],
       },
       {
         id: 'slide-technology-07-s2',
@@ -1133,8 +1134,8 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
           'シーケンス図は時系列でのオブジェクト間のメッセージのやり取りを表す',
         ],
         keywords: ['UML', 'クラス図', 'シーケンス図', 'ユースケース図'],
-        relatedQuestionIds: ['q-tech-040'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-040', 'q-nt-tech-020'],
+        relatedGlossaryIds: ['g-uml'],
       },
     ],
   },
@@ -1148,6 +1149,7 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
     quizQuestionIds: [
       'q-tech-041', 'q-tech-042', 'q-tech-043', 'q-tech-044',
       'q-tech-045', 'q-tech-046', 'q-tech-047', 'q-tech-048', 'q-tech-049', 'q-tech-093',
+      'q-nt-tech-014', 'q-nt-tech-015', 'q-nt-tech-016',
     ],
     sections: [
       {
@@ -1176,8 +1178,8 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
           'BIOS/UEFIは電源投入時に最初に動くファームウェアでハードウェア初期化とOS起動を担う',
         ],
         keywords: ['キャッシュメモリ', 'SSD', 'BIOS', 'UEFI', 'CPU'],
-        relatedQuestionIds: ['q-tech-041', 'q-tech-042', 'q-tech-043', 'q-tech-044', 'q-tech-045'],
-        relatedGlossaryIds: ['g-cpu'],
+        relatedQuestionIds: ['q-tech-041', 'q-tech-042', 'q-tech-043', 'q-tech-044', 'q-tech-045', 'q-nt-tech-014', 'q-nt-tech-016'],
+        relatedGlossaryIds: ['g-cpu', 'g-memory', 'g-gpu'],
       },
       {
         id: 'slide-technology-08-s2',
@@ -1212,8 +1214,8 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
           'OSのスケジューリングがCPUを複数プロセスに割り当てマルチタスクを実現する',
         ],
         keywords: ['仮想記憶', 'ページング', 'スワップ', 'プロセス管理', 'OS'],
-        relatedQuestionIds: ['q-tech-046', 'q-tech-047'],
-        relatedGlossaryIds: ['g-os'],
+        relatedQuestionIds: ['q-tech-046', 'q-tech-047', 'q-nt-tech-015'],
+        relatedGlossaryIds: ['g-os', 'g-virtual-memory'],
       },
       {
         id: 'slide-technology-08-s3',
@@ -1266,6 +1268,7 @@ AND（論理積）は「両方が1のとき1」、OR（論理和）は「どち�
     quizQuestionIds: [
       'q-tech-050', 'q-tech-051', 'q-tech-052', 'q-tech-053',
       'q-tech-054', 'q-tech-089', 'q-tech-090', 'q-tech-098',
+      'q-nt-tech-017', 'q-nt-tech-018', 'q-nt-tech-019',
     ],
     sections: [
       {
@@ -1309,8 +1312,8 @@ SELECT文のWHERE句で条件を絞り込みます。INNER JOINは「両方に�
           'AND条件は両方満たす（かつ）、OR条件はどちらかを満たす（または）',
         ],
         keywords: ['SQL', 'SELECT', 'WHERE', 'JOIN', 'INNER JOIN'],
-        relatedQuestionIds: ['q-tech-050', 'q-tech-051', 'q-tech-098'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-050', 'q-tech-051', 'q-tech-098', 'q-nt-tech-018'],
+        relatedGlossaryIds: ['g-primary-key'],
       },
       {
         id: 'slide-technology-09-s2',
@@ -1394,8 +1397,8 @@ NoSQLはスケールアウトと高スループットが強みです。「SQLが
           'トランザクションのACID特性：原子性・一貫性・独立性・永続性',
         ],
         keywords: ['NoSQL', 'トランザクション', 'ACID', '正規化'],
-        relatedQuestionIds: ['q-tech-090'],
-        relatedGlossaryIds: ['g-normalization', 'g-acid'],
+        relatedQuestionIds: ['q-tech-090', 'q-nt-tech-017', 'q-nt-tech-019'],
+        relatedGlossaryIds: ['g-normalization', 'g-acid', 'g-nosql', 'g-erd'],
       },
     ],
   },
@@ -1409,6 +1412,7 @@ NoSQLはスケールアウトと高スループットが強みです。「SQLが
     quizQuestionIds: [
       'q-tech-055', 'q-tech-056', 'q-tech-057', 'q-tech-058',
       'q-tech-059', 'q-tech-060', 'q-tech-061', 'q-tech-062', 'q-tech-088', 'q-tech-091',
+      'q-nt-tech-001', 'q-nt-tech-002', 'q-nt-tech-003', 'q-nt-tech-004',
     ],
     sections: [
       {
@@ -1444,8 +1448,8 @@ DNSはアプリケーション層で「ドメイン名→IPアドレスの変換
           'DHCPはネットワーク参加時にIPアドレスを自動割り当てするプロトコル',
         ],
         keywords: ['NAT', 'DHCP', 'TCP', 'UDP', 'プロトコル'],
-        relatedQuestionIds: ['q-tech-055', 'q-tech-056', 'q-tech-058', 'q-tech-088'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-055', 'q-tech-056', 'q-tech-058', 'q-tech-088', 'q-nt-tech-001', 'q-nt-tech-002', 'q-nt-tech-003', 'q-nt-tech-004'],
+        relatedGlossaryIds: ['g-osi', 'g-dhcp', 'g-nat', 'g-wireless-lan'],
       },
       {
         id: 'slide-technology-10-s2',
@@ -1541,6 +1545,8 @@ DNSは「名前解決（ドメイン→IP変換）」、NATは「アドレス変
       'q-tech-063', 'q-tech-064', 'q-tech-065', 'q-tech-066', 'q-tech-067',
       'q-tech-068', 'q-tech-069', 'q-tech-070', 'q-tech-071',
       'q-tech-086', 'q-tech-087', 'q-tech-092', 'q-tech-096', 'q-tech-100',
+      'q-nt-tech-005', 'q-nt-tech-006', 'q-nt-tech-007',
+      'q-nt-tech-008', 'q-nt-tech-009', 'q-nt-tech-010', 'q-nt-tech-011',
     ],
     sections: [
       {
@@ -1578,8 +1584,8 @@ SQLインジェクションは「DB不正操作」、XSSは「スクリプト埋
           'CSRFはログイン済みユーザーに意図しない操作を別サイトから強制実行させる攻撃',
         ],
         keywords: ['SQLインジェクション', 'XSS', 'クロスサイトスクリプティング', 'CSRF'],
-        relatedQuestionIds: ['q-tech-064', 'q-tech-070', 'q-tech-086'],
-        relatedGlossaryIds: ['g-sql-injection'],
+        relatedQuestionIds: ['q-tech-064', 'q-tech-070', 'q-tech-086', 'q-nt-tech-010'],
+        relatedGlossaryIds: ['g-sql-injection', 'g-xss'],
       },
       {
         id: 'slide-technology-11-s2',
@@ -1615,8 +1621,8 @@ WAFは「通常のファイアウォールではフィルタできないWebア�
           'WAFはSQLインジェクション・XSSなどWebアプリ向け攻撃を検出・遮断するセキュリティ機器',
         ],
         keywords: ['ランサムウェア', 'ゼロデイ', 'WAF', '最小権限原則'],
-        relatedQuestionIds: ['q-tech-065', 'q-tech-071', 'q-tech-096', 'q-tech-100'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-065', 'q-tech-071', 'q-tech-096', 'q-tech-100', 'q-nt-tech-008', 'q-nt-tech-009', 'q-nt-tech-011'],
+        relatedGlossaryIds: ['g-ransomware', 'g-zero-day', 'g-malware', 'g-dos'],
       },
       {
         id: 'slide-technology-11-s3',
@@ -1646,8 +1652,8 @@ WAFは「通常のファイアウォールではフィルタできないWebア�
           'MFAは知識・所持・生体の3要素から2種類以上を組み合わせる認証方式',
         ],
         keywords: ['デジタル証明書', 'VPN', 'MFA', '多要素認証', 'ファイアウォール'],
-        relatedQuestionIds: ['q-tech-063', 'q-tech-066', 'q-tech-067', 'q-tech-068', 'q-tech-069', 'q-tech-087', 'q-tech-092'],
-        relatedGlossaryIds: ['g-pki', 'g-vpn', 'g-firewall', 'g-mfa'],
+        relatedQuestionIds: ['q-tech-063', 'q-tech-066', 'q-tech-067', 'q-tech-068', 'q-tech-069', 'q-tech-087', 'q-tech-092', 'q-nt-tech-005', 'q-nt-tech-006', 'q-nt-tech-007'],
+        relatedGlossaryIds: ['g-pki', 'g-vpn', 'g-firewall', 'g-mfa', 'g-ssl-tls', 'g-digital-signature', 'g-hash'],
       },
     ],
   },
@@ -1658,7 +1664,7 @@ WAFは「通常のファイアウォールではフィルタできないWebア�
     category: 'クラウド・仮想化・DevOps',
     title: 'クラウド・仮想化・DevOps',
     order: 31,
-    quizQuestionIds: ['q-tech-072', 'q-tech-073', 'q-tech-074', 'q-tech-075', 'q-tech-094', 'q-tech-099'],
+    quizQuestionIds: ['q-tech-072', 'q-tech-073', 'q-tech-074', 'q-tech-075', 'q-tech-094', 'q-tech-099', 'q-nt-tech-021', 'q-nt-tech-022'],
     sections: [
       {
         id: 'slide-technology-12-s1',
@@ -1692,8 +1698,8 @@ IaaS→PaaS→SaaSの順にユーザーの管理範囲が狭まり（楽にな�
           'クラウドの従量課金制は使った分だけ支払い、初期投資（CapEx）が不要',
         ],
         keywords: ['IaaS', 'PaaS', 'SaaS', 'クラウド'],
-        relatedQuestionIds: ['q-tech-072', 'q-tech-094'],
-        relatedGlossaryIds: ['g-iaas'],
+        relatedQuestionIds: ['q-tech-072', 'q-tech-094', 'q-nt-tech-022'],
+        relatedGlossaryIds: ['g-iaas', 'g-paas', 'g-saas'],
       },
       {
         id: 'slide-technology-12-s2',
@@ -1763,8 +1769,8 @@ IaaS→PaaS→SaaSの順にユーザーの管理範囲が狭まり（楽にな�
           'クラウドの責任共有モデルはセキュリティ責任をクラウド事業者とユーザーで分担する',
         ],
         keywords: ['サーバーレス', 'FaaS', 'DevOps'],
-        relatedQuestionIds: ['q-tech-075', 'q-tech-099'],
-        relatedGlossaryIds: ['g-devops'],
+        relatedQuestionIds: ['q-tech-075', 'q-tech-099', 'q-nt-tech-021'],
+        relatedGlossaryIds: ['g-devops', 'g-api', 'g-three-tier'],
       },
     ],
   },
@@ -1775,7 +1781,7 @@ IaaS→PaaS→SaaSの順にユーザーの管理範囲が狭まり（楽にな�
     category: 'IoT・AI・新技術',
     title: 'IoT・AI・新技術',
     order: 32,
-    quizQuestionIds: ['q-tech-076', 'q-tech-077', 'q-tech-078', 'q-tech-079', 'q-tech-097'],
+    quizQuestionIds: ['q-tech-076', 'q-tech-077', 'q-tech-078', 'q-tech-079', 'q-tech-097', 'q-nt-tech-023', 'q-nt-tech-024'],
     sections: [
       {
         id: 'slide-technology-13-s1',
@@ -1812,8 +1818,8 @@ AI（人工知能）
           '画像認識・音声認識・自然言語処理で飛躍的な性能向上をもたらした',
         ],
         keywords: ['ディープラーニング', '機械学習', 'AI'],
-        relatedQuestionIds: ['q-tech-076'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-076', 'q-nt-tech-024'],
+        relatedGlossaryIds: ['g-ai', 'g-machine-learning', 'g-deep-learning', 'g-bigdata'],
       },
       {
         id: 'slide-technology-13-s2',
@@ -1882,8 +1888,8 @@ AI（人工知能）
           'NLPの応用：チャットボット・機械翻訳・感情分析・音声認識など幅広い分野で活用',
         ],
         keywords: ['エッジコンピューティング', 'NLP', '自然言語処理'],
-        relatedQuestionIds: ['q-tech-078', 'q-tech-097'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-tech-078', 'q-tech-097', 'q-nt-tech-023'],
+        relatedGlossaryIds: ['g-iot', 'g-edge-computing'],
       },
     ],
   },
