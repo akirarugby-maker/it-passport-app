@@ -1,6 +1,7 @@
 import type { GlossaryTerm } from '@/types';
+import { glossaryTermsExtra } from './glossary_extra';
 
-export const glossaryTerms: GlossaryTerm[] = [
+export const glossaryTermsBase: GlossaryTerm[] = [
   // ストラテジ系
   { id: 'g-swot', term: 'SWOT分析', reading: 'スウォットぶんせき', domain: 'strategy', category: '経営戦略', definition: '企業の強み(Strengths)・弱み(Weaknesses)・機会(Opportunities)・脅威(Threats)を整理して戦略を立案するフレームワーク。', example: 'SO戦略：強みを活かして機会を捉える積極戦略', relatedTermIds: ['g-bsc'], relatedSlideId: 'slide-strategy-01', relatedQuestionIds: ['q-str-001'] },
   { id: 'g-bsc', term: 'バランスト・スコアカード（BSC）', reading: 'バランストスコアカード', domain: 'strategy', category: '経営戦略', definition: '財務・顧客・内部プロセス・学習と成長の4視点から企業戦略の達成度を評価・管理するフレームワーク。', relatedTermIds: ['g-swot', 'g-kpi'], relatedSlideId: 'slide-strategy-01', relatedQuestionIds: ['q-str-002'] },
@@ -45,6 +46,8 @@ export const glossaryTerms: GlossaryTerm[] = [
   { id: 'g-binary-search', term: '二分探索', reading: 'にぶんたんさく', domain: 'technology', category: 'アルゴリズム', definition: 'ソート済みデータを対象に、探索範囲を半分ずつ絞り込んで目的の値を探す探索アルゴリズム。計算量O(log n)。事前ソートが必要。', relatedSlideId: 'slide-technology-04', relatedQuestionIds: ['q-tech-016'] },
   { id: 'g-queue', term: 'キュー（Queue）', reading: 'キュー', domain: 'technology', category: 'アルゴリズム', definition: 'FIFO（First In First Out：先入れ先出し）でデータを管理するデータ構造。プリントスプール・メッセージキューに活用。スタックはLIFO（後入れ先出し）。', relatedSlideId: 'slide-technology-04', relatedQuestionIds: ['q-tech-017'] },
 ];
+
+export const glossaryTerms: GlossaryTerm[] = [...glossaryTermsBase, ...glossaryTermsExtra];
 
 export const getTermById = (id: string) => glossaryTerms.find((t) => t.id === id);
 export const getTermsByDomain = (domain: string) => glossaryTerms.filter((t) => t.domain === domain);
