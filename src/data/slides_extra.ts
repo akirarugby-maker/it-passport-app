@@ -9,7 +9,7 @@ export const slidesExtra: Slide[] = [
     category: 'ビジネス環境分析',
     title: 'ビジネス環境分析',
     order: 11,
-    quizQuestionIds: ['q-str-014', 'q-str-015', 'q-str-016', 'q-str-017'],
+    quizQuestionIds: ['q-str-014', 'q-str-015', 'q-str-016', 'q-str-017', 'q-nt-str-001', 'q-nt-str-002'],
     sections: [
       {
         id: 'slide-strategy-04-s1',
@@ -78,40 +78,40 @@ PEST分析は「自社ではコントロールできない外部環境」を分�
       },
       {
         id: 'slide-strategy-04-s3',
-        title: 'ベンチマーキングとアンゾフ成長マトリクス',
-        content: `ベンチマーキングとは、業界最高水準の企業や他社の優れたやり方（ベストプラクティス）を調査・比較して、自社の改善に活かす経営手法です。アンゾフ成長マトリクスは「製品」と「市場」の2軸で事業成長の方向性を4つに分類したフレームワークです。
+        title: 'PPM・ベンチマーキング・アンゾフ成長マトリクス',
+        content: `PPM・ベンチマーキング・アンゾフ成長マトリクスは、いずれも経営資源の配分や成長方向性を判断するための代表的なフレームワークです。
 
-■ 図解（アンゾフ成長マトリクス）
+■ PPM（プロダクト・ポートフォリオ・マネジメント）
+市場成長率と市場占有率（シェア）の2軸で事業を4象限に分類します。
+
+| 象限 | 市場成長率 | 市場シェア | 特徴と戦略 |
+|------|----------|----------|-----------|
+| 花形（スター） | 高い | 高い | 積極投資。将来の金のなる木候補 |
+| 金のなる木 | 低い | 高い | 資金源。過剰な投資は不要 |
+| 問題児 | 高い | 低い | 投資か撤退かの判断が必要 |
+| 負け犬 | 低い | 低い | 撤退・縮小を検討 |
+
+■ アンゾフ成長マトリクス
+製品（既存/新規）×市場（既存/新規）の4象限で成長戦略を分類します。
+
 |  | 既存製品 | 新製品 |
 |--|----------|--------|
 | 既存市場 | ①市場浸透（最小リスク） | ③製品開発 |
 | 新市場 | ②市場開拓 | ④多角化（最大リスク） |
 
-・①市場浸透：同じ市場に同じ製品をさらに多く売る（広告強化・値下げなど）
-・②市場開拓：新しい市場に既存製品を展開する（海外進出など）
-・③製品開発：同じ市場向けに新製品を開発する
-・④多角化：新しい市場に新しい製品を投入する（最もリスクが高い）
-
-■ 具体例
-コンビニチェーンのアンゾフ活用：
-・市場浸透 → ポイントカードで既存客の来店頻度を上げる
-・市場開拓 → アジア（タイ・台湾など）へ海外展開する
-・製品開発 → 高品質コーヒーや冷凍食品ラインの新商品開発
-・多角化 → 銀行・保険など金融サービスへの参入
-
-ベンチマーキングの例：
-製造業がリードタイムを短縮したい → 物流最速の企業を調査し、自社の配送工程を参考にして改善する
+■ ベンチマーキング
+業界最高水準の企業（ベストプラクティス）を調査・比較して自社改善に活かす経営手法。
 
 ■ 試験のポイント
-リスクの大きさ：①市場浸透（最小）＜②市場開拓＜③製品開発＜④多角化（最大）。「多角化はリスクが最大」という点がよく問われます。`,
+PPMは「花形→金のなる木」の流れと各象限の特徴を覚えましょう。アンゾフは多角化が最もリスクが高い点がよく出ます。`,
         keyPoints: [
-          'ベンチマーキングは他社のベストプラクティスを調査・参考にして自社改善に活かす',
-          'アンゾフは製品×市場の2軸で成長戦略を4つに分類する',
-          '多角化（新市場×新製品）はリスクが最も大きい戦略',
+          'PPMは市場成長率×市場シェアで事業を花形・金のなる木・問題児・負け犬に分類',
+          'アンゾフは製品×市場の2軸で成長戦略を4つに分類。多角化がリスク最大',
+          'ベンチマーキングは他社のベストプラクティスを自社改善に活かす手法',
         ],
-        keywords: ['ベンチマーキング', 'アンゾフ', '成長マトリクス'],
-        relatedQuestionIds: ['q-str-016', 'q-str-017'],
-        relatedGlossaryIds: [],
+        keywords: ['PPM', 'ベンチマーキング', 'アンゾフ', '成長マトリクス', '市場成長率'],
+        relatedQuestionIds: ['q-str-016', 'q-str-017', 'q-nt-str-001', 'q-nt-str-002'],
+        relatedGlossaryIds: ['g-ansoff', 'g-ppm'],
       },
     ],
   },
@@ -125,6 +125,7 @@ PEST分析は「自社ではコントロールできない外部環境」を分�
     quizQuestionIds: [
       'q-str-018', 'q-str-019', 'q-str-020', 'q-str-021', 'q-str-022', 'q-str-023',
       'q-str-058', 'q-str-059', 'q-str-064', 'q-str-067',
+      'q-nt-str-003', 'q-nt-str-004',
     ],
     sections: [
       {
@@ -151,9 +152,9 @@ CRMは「顧客」との関係を管理します。SCMは「仕入先から顧�
           'SCMは調達から販売までのサプライチェーン全体を最適化する',
           'CRM＝顧客管理、SCM＝モノの流れの管理と覚える',
         ],
-        keywords: ['CRM', 'SCM', '顧客関係管理', 'サプライチェーン'],
-        relatedQuestionIds: ['q-str-018', 'q-str-019'],
-        relatedGlossaryIds: [],
+        keywords: ['CRM', 'SCM', 'ERP', '顧客関係管理', 'サプライチェーン'],
+        relatedQuestionIds: ['q-str-018', 'q-str-019', 'q-nt-str-003', 'q-nt-str-004'],
+        relatedGlossaryIds: ['g-crm', 'g-scm', 'g-erp'],
       },
       {
         id: 'slide-strategy-05-s2',
@@ -216,7 +217,7 @@ KGIは「最終目標」、KPIは「中間指標（途中経過）」です。OO
         ],
         keywords: ['持株会社', 'バリューチェーン', 'CSR', 'ステークホルダー', 'アウトソーシング'],
         relatedQuestionIds: ['q-str-020', 'q-str-058', 'q-str-059', 'q-str-064', 'q-str-067'],
-        relatedGlossaryIds: [],
+        relatedGlossaryIds: ['g-value-chain', 'g-csr', 'g-compliance'],
       },
     ],
   },
@@ -227,7 +228,7 @@ KGIは「最終目標」、KPIは「中間指標（途中経過）」です。OO
     category: '法務詳細',
     title: '法務詳細',
     order: 13,
-    quizQuestionIds: ['q-str-024', 'q-str-025', 'q-str-026', 'q-str-027', 'q-str-028', 'q-str-029'],
+    quizQuestionIds: ['q-str-024', 'q-str-025', 'q-str-026', 'q-str-027', 'q-str-028', 'q-str-029', 'q-nt-str-010', 'q-nt-str-011', 'q-nt-str-012'],
     sections: [
       {
         id: 'slide-strategy-06-s1',
@@ -256,9 +257,9 @@ KGIは「最終目標」、KPIは「中間指標（途中経過）」です。OO
           '職務発明の特許を受ける権利は原則として使用者（会社）に帰属する',
           '営業秘密の3要件：秘密管理性・有用性・非公知性のすべてが必要',
         ],
-        keywords: ['商標権', '職務発明', '不正競争防止法', '営業秘密'],
-        relatedQuestionIds: ['q-str-024', 'q-str-025', 'q-str-026'],
-        relatedGlossaryIds: [],
+        keywords: ['商標権', '特許権', '実用新案権', '職務発明', '不正競争防止法', '営業秘密'],
+        relatedQuestionIds: ['q-str-024', 'q-str-025', 'q-str-026', 'q-nt-str-010', 'q-nt-str-011'],
+        relatedGlossaryIds: ['g-trademark', 'g-patent', 'g-utility-model', 'g-unfair-competition'],
       },
       {
         id: 'slide-strategy-06-s2',
@@ -287,6 +288,41 @@ KGIは「最終目標」、KPIは「中間指標（途中経過）」です。OO
         keywords: ['プロバイダ責任制限法', '電子署名法', 'クリエイティブ・コモンズ', '著作権'],
         relatedQuestionIds: ['q-str-027', 'q-str-028', 'q-str-029'],
         relatedGlossaryIds: ['g-copyright'],
+      },
+      {
+        id: 'slide-strategy-06-s3',
+        title: 'GDPR・コンプライアンス・内部統制・SDGs',
+        content: `企業が守るべきグローバルな規制と社会的責任について整理します。GDPRや内部統制は試験でも頻出のテーマです。
+
+■ GDPR（EU一般データ保護規則）
+| 項目 | 内容 |
+|------|------|
+| 対象 | EU市民の個人データを扱うすべての組織（日本企業でもEU市民のデータを扱えば適用） |
+| 主な権利 | 忘れられる権利・データポータビリティ権・同意の撤回権 |
+| 違反時の制裁 | 最大2,000万ユーロ、または全世界年間売上高の4%（どちらか高い方） |
+
+■ コンプライアンスと内部統制
+・コンプライアンス：法令・規制・社会規範・企業倫理を遵守する取り組み（法令を守るだけでなく、倫理的行動も含む）
+・内部統制の4目的：
+  ① 業務の有効性・効率性
+  ② 財務報告の信頼性
+  ③ 関連法規の遵守（コンプライアンス）
+  ④ 資産の保全
+  J-SOX法（金融商品取引法）では上場企業に内部統制報告書の提出を義務付け
+
+■ SDGs（持続可能な開発目標）
+2030年までに達成すべき17の国際目標。企業はESG経営（Environmental・Social・Governance）と組み合わせて実践。
+
+■ 試験のポイント
+GDPRは「EU域外の企業にも適用される」点が重要です。内部統制の4目的はセットで覚えましょう。SDGsは17目標・2030年達成期限が基本知識です。`,
+        keyPoints: [
+          'GDPRはEU市民のデータを扱う全組織に適用（日本企業も対象になる）',
+          '内部統制の4目的：業務有効性・財務報告信頼性・法令遵守・資産保全',
+          'SDGsは2030年までの17の国際目標。ESG経営と連動して企業活動に浸透',
+        ],
+        keywords: ['GDPR', 'コンプライアンス', '内部統制', 'SDGs', 'ESG', 'J-SOX'],
+        relatedQuestionIds: ['q-nt-str-012'],
+        relatedGlossaryIds: ['g-gdpr', 'g-compliance', 'g-internal-control', 'g-sdgs', 'g-csr'],
       },
     ],
   },
@@ -331,7 +367,7 @@ ROEとROIの違いに注意してください。ROE＝自己資本（株主の�
         ],
         keywords: ['ROE', '流動比率', 'ABC分析', 'LTV', '財務指標'],
         relatedQuestionIds: ['q-str-033', 'q-str-034', 'q-str-035', 'q-str-051'],
-        relatedGlossaryIds: [],
+        relatedGlossaryIds: ['g-abc-analysis'],
       },
       {
         id: 'slide-strategy-07-s2',
@@ -396,9 +432,9 @@ ROEとROIの違いに注意してください。ROE＝自己資本（株主の�
           'NPV（正味現在価値）が正のとき投資価値あり、負のとき投資すべきでない',
           'コモディティ化は差別化が困難になり価格競争に陥る現象',
         ],
-        keywords: ['貸借対照表', 'NPV', 'コモディティ化', 'プロダクトライフサイクル', 'NPS', 'SEO'],
+        keywords: ['貸借対照表', 'NPV', 'コモディティ化', 'プロダクトライフサイクル', 'NPS', 'SEO', '4C'],
         relatedQuestionIds: ['q-str-030', 'q-str-032', 'q-str-050', 'q-str-060', 'q-str-065', 'q-str-068'],
-        relatedGlossaryIds: [],
+        relatedGlossaryIds: ['g-4c'],
       },
     ],
   },
@@ -412,6 +448,7 @@ ROEとROIの違いに注意してください。ROE＝自己資本（株主の�
     quizQuestionIds: [
       'q-str-036', 'q-str-037', 'q-str-038', 'q-str-039', 'q-str-040',
       'q-str-048', 'q-str-049', 'q-str-057', 'q-str-063', 'q-str-069',
+      'q-nt-str-005',
     ],
     sections: [
       {
@@ -439,8 +476,8 @@ BPRは「小さな改善（改善）」ではなく「根本からの再設計�
           'DXはデジタル技術でビジネスモデル・組織文化まで根本から変革すること',
         ],
         keywords: ['EA', 'エンタープライズアーキテクチャ', 'BPR', 'DX', 'デジタルトランスフォーメーション'],
-        relatedQuestionIds: ['q-str-036', 'q-str-037', 'q-str-040'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-str-036', 'q-str-037', 'q-str-040', 'q-nt-str-005'],
+        relatedGlossaryIds: ['g-bpr'],
       },
       {
         id: 'slide-strategy-08-s2',
@@ -515,6 +552,7 @@ BYODはメリット（コスト削減・利便性）とデメリット（情報�
     quizQuestionIds: [
       'q-str-041', 'q-str-042', 'q-str-046', 'q-str-047',
       'q-str-054', 'q-str-055', 'q-str-056', 'q-str-061',
+      'q-nt-str-006', 'q-nt-str-009', 'q-nt-str-013',
     ],
     sections: [
       {
@@ -575,8 +613,8 @@ BYODはメリット（コスト削減・利便性）とデメリット（情報�
           'シェアリングエコノミーは個人の遊休資産をプラットフォームで共有・貸し出すモデル',
         ],
         keywords: ['FinTech', 'ブロックチェーン', 'APIエコノミー', 'シェアリングエコノミー'],
-        relatedQuestionIds: ['q-str-042', 'q-str-046', 'q-str-047', 'q-str-061'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-str-042', 'q-str-046', 'q-str-047', 'q-str-061', 'q-nt-str-009', 'q-nt-str-013'],
+        relatedGlossaryIds: ['g-fintech', 'g-blockchain', 'g-sharing-economy'],
       },
       {
         id: 'slide-strategy-09-s3',
@@ -603,9 +641,9 @@ RPAは「ルールが決まった定型業務の自動化」に適していま�
           '24時間365日・高速・正確な処理でコスト削減と生産性向上に貢献',
           'ルールが決まった定型業務に適し、判断が必要な複雑業務は不得意',
         ],
-        keywords: ['RPA', '業務自動化'],
-        relatedQuestionIds: ['q-str-056'],
-        relatedGlossaryIds: [],
+        keywords: ['RPA', '業務自動化', 'ロボティック'],
+        relatedQuestionIds: ['q-str-056', 'q-nt-str-006'],
+        relatedGlossaryIds: ['g-rpa'],
       },
     ],
   },
@@ -616,7 +654,7 @@ RPAは「ルールが決まった定型業務の自動化」に適していま�
     category: 'IoT・AI・デジタルトレンド',
     title: 'IoT・AI・デジタルトレンド',
     order: 17,
-    quizQuestionIds: ['q-str-043', 'q-str-044', 'q-str-045', 'q-str-062', 'q-str-066', 'q-str-070'],
+    quizQuestionIds: ['q-str-043', 'q-str-044', 'q-str-045', 'q-str-062', 'q-str-066', 'q-str-070', 'q-nt-str-007', 'q-nt-str-008'],
     sections: [
       {
         id: 'slide-strategy-10-s1',
@@ -648,8 +686,8 @@ RPAは「ルールが決まった定型業務の自動化」に適していま�
           'クラウドは大量処理に強く、エッジは即時性が必要な場面に適している',
         ],
         keywords: ['IoT', 'モノのインターネット', 'エッジコンピューティング'],
-        relatedQuestionIds: ['q-str-043', 'q-str-066'],
-        relatedGlossaryIds: [],
+        relatedQuestionIds: ['q-str-043', 'q-str-066', 'q-nt-str-008'],
+        relatedGlossaryIds: ['g-iot'],
       },
       {
         id: 'slide-strategy-10-s2',
@@ -682,9 +720,9 @@ RPAは「ルールが決まった定型業務の自動化」に適していま�
           '教師あり学習は正解データありで学習、教師なし学習はデータのパターンを自ら発見',
           'ディープラーニングは多層ニューラルネットワークで特徴を自動抽出する高精度な手法',
         ],
-        keywords: ['ビッグデータ', '3V', '機械学習', '教師あり学習', 'ディープラーニング'],
-        relatedQuestionIds: ['q-str-044', 'q-str-045'],
-        relatedGlossaryIds: [],
+        keywords: ['ビッグデータ', '3V', '機械学習', '教師あり学習', 'ディープラーニング', 'AI'],
+        relatedQuestionIds: ['q-str-044', 'q-str-045', 'q-nt-str-007'],
+        relatedGlossaryIds: ['g-ai', 'g-machine-learning', 'g-deep-learning'],
       },
       {
         id: 'slide-strategy-10-s3',
