@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, BookMarked, ClipboardList, CheckCircle2, ArrowLeft, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -11,7 +11,26 @@ import { getQuestionsByIds } from '@/data/questions';
 import { getTermsByIds } from '@/data/glossary';
 import { domainLabel, domainBadgeClass } from '@/utils/domain';
 import { cn } from '@/utils/cn';
-import type { ComparisonTable } from '@/types';
+import type { ComparisonTable, Question } from '@/types';
+
+const shuffle = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const shuffleChoices = (q: Question): Question => {
+  const indices = q.choices.map((_, i) => i);
+  const shuffled = shuffle(indices);
+  return {
+    ...q,
+    choices: shuffled.map((i) => q.choices[i]),
+    correctIndex: shuffled.indexOf(q.correctIndex),
+  };
+};
 
 function renderContent(content: string) {
   const lines = content.split('\n');
@@ -170,7 +189,11 @@ export const SlideDetailPage = () => {
 
   const section = slide.sections[currentSection];
   const repetition = progress.slidesSections[section.id] || { count: 0, dates: [] };
-  const quizQuestions = getQuestionsByIds(slide.quizQuestionIds);
+  const quizQuestions = useMemo(
+    () => getQuestionsByIds(slide.quizQuestionIds).map(shuffleChoices),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [slide.id]
+  );
 
   const goToQuiz = () => {
     navigate(`/quiz?slideId=${slide.id}`);
