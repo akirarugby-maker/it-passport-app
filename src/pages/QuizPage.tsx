@@ -320,6 +320,18 @@ export const QuizPage = () => {
                         </p>
                       )}
                       <p className="text-xs text-gray-500 mt-1">{q.explanation}</p>
+                      {!isCorrect && q.relatedSlideId && (() => {
+                        const slide = getSlideById(q.relatedSlideId);
+                        return (
+                          <button
+                            onClick={() => navigate(`/slides/${q.relatedSlideId}?from=quiz`)}
+                            className="mt-2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 transition-colors text-xs font-medium"
+                          >
+                            <BookOpen className="w-3 h-3 shrink-0" />
+                            スライドで復習{slide ? `：${slide.title}` : ''}
+                          </button>
+                        );
+                      })()}
                     </div>
                   </div>
                 </CardBody>
@@ -432,15 +444,18 @@ export const QuizPage = () => {
               {isCorrect ? '✓ 正解！' : '✗ 不正解'}
             </p>
             <p className="text-sm text-gray-700">{q.explanation}</p>
-            {q.relatedSlideId && (
-              <button
-                onClick={() => navigate(`/slides/${q.relatedSlideId}?from=quiz`)}
-                className="mt-2 text-xs text-blue-600 hover:underline flex items-center gap-1"
-              >
-                <BookOpen className="w-3 h-3" />
-                スライドで復習する
-              </button>
-            )}
+            {!isCorrect && q.relatedSlideId && (() => {
+              const slide = getSlideById(q.relatedSlideId);
+              return (
+                <button
+                  onClick={() => navigate(`/slides/${q.relatedSlideId}?from=quiz`)}
+                  className="mt-3 w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-blue-300 text-blue-700 hover:bg-blue-50 transition-colors text-sm font-medium"
+                >
+                  <BookOpen className="w-4 h-4 shrink-0" />
+                  <span className="text-left">スライドで復習する{slide ? `：${slide.title}` : ''}</span>
+                </button>
+              );
+            })()}
           </CardBody>
         </Card>
       )}
