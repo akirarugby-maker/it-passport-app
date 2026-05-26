@@ -11,7 +11,7 @@ import { getTermById } from '@/data/glossary';
 import { domainLabel, domainBadgeClass } from '@/utils/domain';
 import { cn } from '@/utils/cn';
 import { format } from 'date-fns';
-import type { Domain, QuizMode } from '@/types';
+import type { Domain, Question, QuizMode } from '@/types';
 
 const EXAM_QUESTION_COUNT = 100;
 const EXAM_MINUTES = 165;
@@ -23,6 +23,16 @@ const shuffle = <T,>(arr: T[]): T[] => {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+};
+
+const shuffleChoices = (q: Question): Question => {
+  const indices = q.choices.map((_, i) => i);
+  const shuffled = shuffle(indices);
+  return {
+    ...q,
+    choices: shuffled.map((i) => q.choices[i]),
+    correctIndex: shuffled.indexOf(q.correctIndex),
+  };
 };
 
 type QuizState = 'select' | 'playing' | 'result';
@@ -63,7 +73,7 @@ export const QuizPage = () => {
   // Auto-start if slideId / termId / mode is passed in URL
   useEffect(() => {
     if (urlSlideId || urlTermId) {
-      const qs = buildQuestionsFromUrl();
+      const qs = buildQuestionsFromUrl().map(shuffleChoices);
       if (qs.length > 0) {
         setQuizQuestions(qs);
         setCurrentIdx(0);
@@ -132,7 +142,7 @@ export const QuizPage = () => {
   };
 
   const startQuiz = () => {
-    const qs = buildQuestions();
+    const qs = buildQuestions().map(shuffleChoices);
     setQuizQuestions(qs);
     setCurrentIdx(0);
     setAnswers({});
