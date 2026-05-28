@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, BookMarked, ClipboardList, CheckCircle2, ArrowLeft, LayoutGrid } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookMarked, ClipboardList, CheckCircle2, ArrowLeft, LayoutGrid, Clapperboard } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RepetitionBadge } from '@/components/ui/RepetitionBadge';
@@ -309,6 +309,19 @@ export const SlideDetailPage = () => {
                         </li>
                       ))}
                     </ul>
+                  </div>
+
+                  {/* YouTube search */}
+                  <div className="mt-3">
+                    <a
+                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent('ITパスポート ' + (section.keywords.length > 0 ? section.keywords.slice(0, 3).join(' ') : section.title))}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 border border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors bg-white"
+                    >
+                      <Clapperboard className="w-3.5 h-3.5" />
+                      YouTubeで動画を探す
+                    </a>
                   </div>
 
                   {/* Navigation links */}
