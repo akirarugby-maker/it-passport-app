@@ -14,7 +14,7 @@ import { cn } from '@/utils/cn';
 import type { Domain, Slide, StudyProgress } from '@/types';
 
 const DOMAINS: Domain[] = ['strategy', 'management', 'technology'];
-const TARGET = new Date('2027-04-01T00:00:00+09:00');
+const TARGET = new Date('2026-08-20T00:00:00+09:00');
 
 function getTimeLeft() {
   const diff = TARGET.getTime() - Date.now();
@@ -339,7 +339,7 @@ export const HomePage = () => {
 
       {/* ③ カウントダウン */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-4 text-white">
-        <p className="text-xs text-blue-200 mb-2 text-center">試験日まで（2027年4月1日）</p>
+        <p className="text-xs text-blue-200 mb-2 text-center">試験日まで（2026年8月20日）</p>
         <div className="flex gap-2">
           {([['日', timeLeft.days], ['時間', timeLeft.hours], ['分', timeLeft.minutes], ['秒', timeLeft.seconds]] as [string, number][]).map(([label, val]) => (
             <div key={label} className="flex-1 bg-blue-500/50 rounded-xl py-2 text-center">
