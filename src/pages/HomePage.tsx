@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Search, ChevronDown, ChevronUp, RotateCcw,
-  BookOpen, ClipboardList, BookMarked, X, Info,
+  BookOpen, ClipboardList, BookMarked, X, Info, Download, Upload, Database,
 } from 'lucide-react';
 import { Card, CardBody } from '@/components/ui/Card';
 import { useAppStore } from '@/store/useAppStore';
@@ -52,6 +52,116 @@ const EXAM_INFO: [string, string, boolean?][] = [
   ['受験資格', 'なし（誰でも受験可能）'],
   ['受験場所', '全国のテストセンター（随時受験可能）'],
 ];
+
+const defaultAppState = {
+  progress: { slidesSections: {}, questions: {}, glossaryTerms: {} },
+  progressTableBaselines: {},
+  answerHistory: [],
+  dailyStudy: [],
+  examSessions: [],
+  streakDays: 0,
+  lastStudyDate: '',
+  navigationHistory: {},
+};
+
+function ExportImportPanel() {
+  const state = useAppStore();
+  const [showImport, setShowImport] = useState(false);
+  const [importMsg, setImportMsg] = useState('');
+
+  const handleExport = () => {
+    try {
+      const data = {
+        progress: state.progress,
+        progressTableBaselines: state.progressTableBaselines,
+        answerHistory: state.answerHistory,
+        dailyStudy: state.dailyStudy,
+        examSessions: state.examSessions,
+        streakDays: state.streakDays,
+        lastStudyDate: state.lastStudyDate,
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `it-passport-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert('エクスポートに失敗しました');
+    }
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(ev.target?.result as string);
+        if (!parsed.progress || !parsed.answerHistory) {
+          setImportMsg('❌ 無効なバックアップファイルです');
+          return;
+        }
+        if (window.confirm('バックアップから復元しますか？\n現在のデータは上書きされます。')) {
+          useAppStore.setState({ ...defaultAppState, ...parsed });
+          setShowImport(false);
+          setImportMsg('✅ 復元しました');
+        }
+      } catch {
+        setImportMsg('❌ ファイルの読み込みに失敗しました');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  return (
+    <Card>
+      <CardBody className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Database className="w-4 h-4 text-gray-400" />
+          <h3 className="text-sm font-bold text-gray-800">データ管理</h3>
+        </div>
+        <p className="text-xs text-gray-500 leading-relaxed">
+          進捗はこのブラウザのみに保存されます。定期的にバックアップして別のデバイスでも使えます。
+        </p>
+        <div className="flex gap-2">
+          <button
+            onClick={handleExport}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-colors"
+          >
+            <Download className="w-3.5 h-3.5" />
+            エクスポート
+          </button>
+          <button
+            onClick={() => { setShowImport((s) => !s); setImportMsg(''); }}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white text-blue-600 text-xs font-bold border border-blue-300 hover:bg-blue-50 transition-colors"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            インポート
+          </button>
+        </div>
+        {showImport && (
+          <div className="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2">
+            <p className="text-xs text-gray-500">バックアップ（.json）ファイルを選択してください</p>
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleImport}
+              className="text-xs w-full file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+          </div>
+        )}
+        {importMsg && (
+          <p className={cn('text-xs font-medium', importMsg.startsWith('✅') ? 'text-green-600' : 'text-red-500')}>
+            {importMsg}
+          </p>
+        )}
+      </CardBody>
+    </Card>
+  );
+}
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -326,6 +436,9 @@ export const HomePage = () => {
             );
           })}
         </div>
+
+        {/* Data management */}
+        <ExportImportPanel />
       </div>
     </div>
   );
