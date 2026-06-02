@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, BookMarked, ClipboardList, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookMarked, ClipboardList, CheckCircle2, ArrowLeft, LayoutGrid, Clapperboard } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RepetitionBadge } from '@/components/ui/RepetitionBadge';
@@ -11,12 +11,153 @@ import { getQuestionsByIds } from '@/data/questions';
 import { getTermsByIds } from '@/data/glossary';
 import { domainLabel, domainBadgeClass } from '@/utils/domain';
 import { cn } from '@/utils/cn';
+import type { ComparisonTable, Question } from '@/types';
+
+const shuffle = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const shuffleChoices = (q: Question): Question => {
+  const indices = q.choices.map((_, i) => i);
+  const shuffled = shuffle(indices);
+  return {
+    ...q,
+    choices: shuffled.map((i) => q.choices[i]),
+    correctIndex: shuffled.indexOf(q.correctIndex),
+  };
+};
+
+function renderContent(content: string) {
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  let i = 0;
+  let key = 0;
+
+  const isSeparatorRow = (l: string) => /^\s*\|[\s\-|:]+\|\s*$/.test(l);
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (line.trim().startsWith('|')) {
+      const tableLines: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        tableLines.push(lines[i]);
+        i++;
+      }
+      const rows = tableLines
+        .filter((l) => !isSeparatorRow(l))
+        .map((l) =>
+          l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim())
+        );
+      if (rows.length > 0) {
+        const [header, ...body] = rows;
+        elements.push(
+          <div key={key++} className="overflow-x-auto my-3 rounded-lg border border-gray-200">
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="bg-blue-50">
+                  {header.map((cell, ci) => (
+                    <th key={ci} className="px-3 py-2 text-left font-semibold text-gray-700 border-b border-gray-200 whitespace-nowrap">
+                      {cell}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {body.map((row, ri) => (
+                  <tr key={ri} className={ri % 2 !== 0 ? 'bg-gray-50' : ''}>
+                    {row.map((cell, ci) => (
+                      <td key={ci} className="px-3 py-2 text-gray-700 border-t border-gray-100">
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      continue;
+    }
+
+    if (line.startsWith('■')) {
+      elements.push(
+        <p key={key++} className="text-sm font-bold text-gray-800 mt-4 mb-1">
+          {line}
+        </p>
+      );
+      i++;
+      continue;
+    }
+
+    if (line.trim() === '') {
+      elements.push(<div key={key++} className="h-1" />);
+      i++;
+      continue;
+    }
+
+    elements.push(
+      <p key={key++} className="text-sm text-gray-700 leading-relaxed">
+        {line}
+      </p>
+    );
+    i++;
+  }
+
+  return <div className="space-y-0.5">{elements}</div>;
+}
+
+function ComparisonTableView({ tables }: { tables: ComparisonTable[] }) {
+  return (
+    <div className="space-y-6">
+      {tables.map((table, ti) => (
+        <div key={ti}>
+          <h3 className="text-sm font-bold text-gray-800 mb-2">{table.title}</h3>
+          <div className="overflow-x-auto rounded-lg border border-indigo-200">
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="bg-indigo-50">
+                  {table.headers.map((h, hi) => (
+                    <th key={hi} className="px-3 py-2 text-left font-semibold text-indigo-800 border-b border-indigo-200 whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {table.rows.map((row, ri) => (
+                  <tr key={ri} className={ri % 2 !== 0 ? 'bg-indigo-50/40' : ''}>
+                    {row.map((cell, ci) => (
+                      <td key={ci} className={cn(
+                        'px-3 py-2 text-gray-700 border-t border-indigo-100 align-top',
+                        ci === 0 && 'font-semibold text-indigo-900 whitespace-nowrap'
+                      )}>
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export const SlideDetailPage = () => {
   const { slideId } = useParams<{ slideId: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [currentSection, setCurrentSection] = useState(0);
+  const [showComparisons, setShowComparisons] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({});
   const [showExplanations, setShowExplanations] = useState<Record<string, boolean>>({});
@@ -48,14 +189,19 @@ export const SlideDetailPage = () => {
 
   const section = slide.sections[currentSection];
   const repetition = progress.slidesSections[section.id] || { count: 0, dates: [] };
-  const quizQuestions = getQuestionsByIds(slide.quizQuestionIds);
+  const quizQuestions = useMemo(
+    () => getQuestionsByIds(slide.quizQuestionIds).map(shuffleChoices),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [slide.id]
+  );
 
-  const goToQuiz = (keyword?: string) => {
-    navigate(`/quiz?mode=domain&domain=${slide.domain}&keyword=${keyword ?? ''}&from=slide&fromSlide=${slide.id}`);
+  const goToQuiz = () => {
+    navigate(`/quiz?slideId=${slide.id}`);
   };
 
   const goToGlossary = (termId?: string) => {
-    navigate(`/glossary${termId ? `?term=${termId}` : ''}&from=slide&fromSlide=${slide.id}`);
+    const base = termId ? `/glossary?term=${termId}` : '/glossary';
+    navigate(`${base}&from=slide&fromSlide=${slide.id}`);
   };
 
   const handleQuizAnswer = (questionId: string, idx: number) => {
@@ -91,10 +237,10 @@ export const SlideDetailPage = () => {
               return (
                 <button
                   key={sec.id}
-                  onClick={() => setCurrentSection(idx)}
+                  onClick={() => { setShowComparisons(false); setCurrentSection(idx); }}
                   className={cn(
                     'px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors border',
-                    currentSection === idx
+                    !showComparisons && currentSection === idx
                       ? 'bg-blue-600 text-white border-blue-600'
                       : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                   )}
@@ -104,88 +250,140 @@ export const SlideDetailPage = () => {
                 </button>
               );
             })}
+            {slide.comparisons && slide.comparisons.length > 0 && (
+              <button
+                onClick={() => setShowComparisons(true)}
+                className={cn(
+                  'px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors border flex items-center gap-1',
+                  showComparisons
+                    ? 'bg-indigo-600 text-white border-indigo-600'
+                    : 'bg-white text-indigo-600 border-indigo-200 hover:bg-indigo-50'
+                )}
+              >
+                <LayoutGrid className="w-3 h-3" />
+                比較表
+              </button>
+            )}
           </div>
 
-          {/* Section content */}
+          {/* Section content / Comparison table */}
           <Card>
             <CardBody>
-              <div className="flex items-start justify-between mb-3">
-                <h2 className="text-lg font-bold text-gray-900">{section.title}</h2>
-                <RepetitionBadge count={repetition.count} />
-              </div>
+              {showComparisons && slide.comparisons ? (
+                <>
+                  <div className="flex items-center gap-2 mb-4">
+                    <LayoutGrid className="w-4 h-4 text-indigo-600" />
+                    <h2 className="text-base font-bold text-gray-900">比較表まとめ</h2>
+                  </div>
+                  <ComparisonTableView tables={slide.comparisons} />
+                  <div className="mt-4 pt-3 border-t border-gray-100">
+                    <button
+                      onClick={() => goToQuiz()}
+                      className="text-xs px-3 py-1.5 bg-green-50 text-green-700 rounded-full border border-green-200 hover:bg-green-100 transition-colors"
+                    >
+                      <ClipboardList className="inline w-3 h-3 mr-1" />
+                      確認問題を解く
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-start justify-between mb-3">
+                    <h2 className="text-lg font-bold text-gray-900">{section.title}</h2>
+                    <RepetitionBadge count={repetition.count} />
+                  </div>
 
-              {/* Content */}
-              <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-line leading-relaxed">
-                {section.content}
-              </div>
+                  {/* Content */}
+                  <div className="max-w-none">
+                    {renderContent(section.content)}
+                  </div>
 
-              {/* Key points */}
-              <div className="mt-4 bg-blue-50 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-blue-800 mb-2">📌 ポイント</h3>
-                <ul className="space-y-1">
-                  {section.keyPoints.map((point, i) => (
-                    <li key={i} className="text-sm text-blue-700 flex items-start gap-2">
-                      <span className="text-blue-400 mt-0.5">•</span>
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  {/* Key points */}
+                  <div className="mt-4 bg-blue-50 rounded-lg p-4">
+                    <h3 className="text-sm font-semibold text-blue-800 mb-2">📌 ポイント</h3>
+                    <ul className="space-y-1">
+                      {section.keyPoints.map((point, i) => (
+                        <li key={i} className="text-sm text-blue-700 flex items-start gap-2">
+                          <span className="text-blue-400 mt-0.5">•</span>
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-              {/* Navigation links */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {section.keywords.slice(0, 3).map((kw) => (
-                  <button
-                    key={kw}
-                    onClick={() => goToGlossary()}
-                    className="text-xs px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full border border-purple-200 hover:bg-purple-100 transition-colors"
-                  >
-                    <BookMarked className="inline w-3 h-3 mr-1" />
-                    {kw}を用語集で確認
-                  </button>
-                ))}
-              </div>
+                  {/* YouTube search */}
+                  <div className="mt-3">
+                    <a
+                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent('ITパスポート ' + (section.keywords.length > 0 ? section.keywords.slice(0, 3).join(' ') : section.title))}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 border border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors bg-white"
+                    >
+                      <Clapperboard className="w-3.5 h-3.5" />
+                      YouTubeで動画を探す
+                    </a>
+                  </div>
 
-              <div className="mt-2 flex flex-wrap gap-2">
-                <button
-                  onClick={() => goToQuiz()}
-                  className="text-xs px-3 py-1.5 bg-green-50 text-green-700 rounded-full border border-green-200 hover:bg-green-100 transition-colors"
-                >
-                  <ClipboardList className="inline w-3 h-3 mr-1" />
-                  関連問題を解く
-                </button>
-              </div>
+                  {/* Navigation links */}
+                  {section.relatedGlossaryIds && section.relatedGlossaryIds.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {getTermsByIds(section.relatedGlossaryIds).slice(0, 4).map((term) => (
+                        <button
+                          key={term.id}
+                          onClick={() => goToGlossary(term.id)}
+                          className="text-xs px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full border border-purple-200 hover:bg-purple-100 transition-colors"
+                        >
+                          <BookMarked className="inline w-3 h-3 mr-1" />
+                          {term.term}を用語集で確認
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <button
+                      onClick={() => goToQuiz()}
+                      className="text-xs px-3 py-1.5 bg-green-50 text-green-700 rounded-full border border-green-200 hover:bg-green-100 transition-colors"
+                    >
+                      <ClipboardList className="inline w-3 h-3 mr-1" />
+                      関連問題を解く
+                    </button>
+                  </div>
+                </>
+              )}
             </CardBody>
           </Card>
 
           {/* Prev/Next navigation */}
-          <div className="flex items-center justify-between">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setCurrentSection((p) => p - 1)}
-              disabled={currentSection === 0}
-            >
-              <ChevronLeft className="w-4 h-4" />
-              前へ
-            </Button>
-
-            {currentSection === slide.sections.length - 1 ? (
-              <Button onClick={() => setShowQuiz(true)}>
-                確認クイズ（{quizQuestions.length}問）
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            ) : (
+          {!showComparisons && (
+            <div className="flex items-center justify-between">
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => setCurrentSection((p) => p + 1)}
+                onClick={() => setCurrentSection((p) => p - 1)}
+                disabled={currentSection === 0}
               >
-                次へ
-                <ChevronRight className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" />
+                前へ
               </Button>
-            )}
-          </div>
+
+              {currentSection === slide.sections.length - 1 ? (
+                <Button onClick={() => setShowQuiz(true)}>
+                  確認クイズ（{quizQuestions.length}問）
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              ) : (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setCurrentSection((p) => p + 1)}
+                >
+                  次へ
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+          )}
         </>
       ) : (
         /* Quiz section */

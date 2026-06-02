@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ClipboardList, Timer, ChevronLeft, ChevronRight, RotateCcw, BookOpen, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -6,10 +6,12 @@ import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { useAppStore } from '@/store/useAppStore';
 import { questions, getQuestionsByDomain, getQuestionsByIds } from '@/data/questions';
+import { getSlideById, getSlideByQuestionId } from '@/data/slides';
+import { getTermById } from '@/data/glossary';
 import { domainLabel, domainBadgeClass } from '@/utils/domain';
 import { cn } from '@/utils/cn';
 import { format } from 'date-fns';
-import type { Domain, QuizMode } from '@/types';
+import type { Domain, Question, QuizMode } from '@/types';
 
 const EXAM_QUESTION_COUNT = 100;
 const EXAM_MINUTES = 165;
@@ -23,12 +25,25 @@ const shuffle = <T,>(arr: T[]): T[] => {
   return a;
 };
 
+const shuffleChoices = (q: Question): Question => {
+  const indices = q.choices.map((_, i) => i);
+  const shuffled = shuffle(indices);
+  return {
+    ...q,
+    choices: shuffled.map((i) => q.choices[i]),
+    correctIndex: shuffled.indexOf(q.correctIndex),
+  };
+};
+
 type QuizState = 'select' | 'playing' | 'result';
 
 export const QuizPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { addAnswer, getWeakQuestionIds, navigationHistory } = useAppStore();
+  const { addAnswer, recordQuestion, getWeakQuestionIds, navigationHistory } = useAppStore();
+
+  const urlSlideId = searchParams.get('slideId') ?? undefined;
+  const urlTermId = searchParams.get('termId') ?? undefined;
 
   const [state, setState] = useState<QuizState>('select');
   const [mode, setMode] = useState<QuizMode>((searchParams.get('mode') as QuizMode) || 'random');
@@ -42,11 +57,33 @@ export const QuizPage = () => {
   const [timeLeft, setTimeLeft] = useState(EXAM_MINUTES * 60);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Auto-start if mode is passed in URL
+  // Title shown when coming from a slide or term
+  const quizTitle = useMemo(() => {
+    if (urlSlideId) {
+      const slide = getSlideById(urlSlideId);
+      return slide ? `「${slide.title}」の関連問題` : '';
+    }
+    if (urlTermId) {
+      const term = getTermById(urlTermId);
+      return term ? `「${term.term}」の関連問題` : '';
+    }
+    return '';
+  }, [urlSlideId, urlTermId]);
+
+  // Auto-start if slideId / termId / mode is passed in URL
   useEffect(() => {
-    const urlMode = searchParams.get('mode') as QuizMode;
-    if (urlMode) {
-      setMode(urlMode);
+    if (urlSlideId || urlTermId) {
+      const qs = buildQuestionsFromUrl().map(shuffleChoices);
+      if (qs.length > 0) {
+        setQuizQuestions(qs);
+        setCurrentIdx(0);
+        setAnswers({});
+        setShowExplanation(false);
+        setState('playing');
+      }
+    } else {
+      const urlMode = searchParams.get('mode') as QuizMode;
+      if (urlMode) setMode(urlMode);
     }
   }, []);
 
@@ -67,7 +104,30 @@ export const QuizPage = () => {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [state, mode]);
 
+  // Build questions specifically linked to a slide or term (used on auto-start)
+  const buildQuestionsFromUrl = () => {
+    if (urlSlideId) {
+      const slide = getSlideById(urlSlideId);
+      if (slide?.quizQuestionIds.length) {
+        return shuffle(getQuestionsByIds(slide.quizQuestionIds));
+      }
+    }
+    if (urlTermId) {
+      const term = getTermById(urlTermId);
+      if (term?.relatedQuestionIds?.length) {
+        return shuffle(getQuestionsByIds(term.relatedQuestionIds));
+      }
+      if (term) {
+        return shuffle(getQuestionsByDomain(term.domain)).slice(0, 10);
+      }
+    }
+    return shuffle(questions).slice(0, 10);
+  };
+
   const buildQuestions = () => {
+    // When re-starting from results screen while slideId/termId is in URL, reuse same pool
+    if (urlSlideId || urlTermId) return buildQuestionsFromUrl();
+
     let pool = questions;
     if (mode === 'domain' && selectedDomain) {
       pool = getQuestionsByDomain(selectedDomain);
@@ -82,7 +142,7 @@ export const QuizPage = () => {
   };
 
   const startQuiz = () => {
-    const qs = buildQuestions();
+    const qs = buildQuestions().map(shuffleChoices);
     setQuizQuestions(qs);
     setCurrentIdx(0);
     setAnswers({});
@@ -96,6 +156,7 @@ export const QuizPage = () => {
     const q = quizQuestions[currentIdx];
     setAnswers((prev) => ({ ...prev, [currentIdx]: idx }));
     setShowExplanation(true);
+    recordQuestion(q.id);
     addAnswer({
       questionId: q.id,
       isCorrect: idx === q.correctIndex,
@@ -259,6 +320,18 @@ export const QuizPage = () => {
                         </p>
                       )}
                       <p className="text-xs text-gray-500 mt-1">{q.explanation}</p>
+                      {!isCorrect && (() => {
+                        const slide = q.relatedSlideId ? getSlideById(q.relatedSlideId) : getSlideByQuestionId(q.id);
+                        return slide ? (
+                          <button
+                            onClick={() => navigate(`/slides/${slide.id}?from=quiz`)}
+                            className="mt-2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 transition-colors text-xs font-medium"
+                          >
+                            <BookOpen className="w-3 h-3 shrink-0" />
+                            スライドで復習：{slide.title}
+                          </button>
+                        ) : null;
+                      })()}
                     </div>
                   </div>
                 </CardBody>
@@ -268,8 +341,16 @@ export const QuizPage = () => {
         </div>
 
         <div className="flex gap-3">
-          <Button variant="secondary" className="flex-1" onClick={() => setState('select')}>
-            出題設定に戻る
+          <Button
+            variant="secondary"
+            className="flex-1"
+            onClick={() => {
+              if (urlSlideId) navigate(`/slides/${urlSlideId}`);
+              else if (urlTermId) navigate('/glossary');
+              else setState('select');
+            }}
+          >
+            {urlSlideId ? 'スライドに戻る' : urlTermId ? '用語集に戻る' : '出題設定に戻る'}
           </Button>
           <Button className="flex-1" onClick={startQuiz}>
             もう一度
@@ -283,16 +364,29 @@ export const QuizPage = () => {
   const q = quizQuestions[currentIdx];
   const answered = answers[currentIdx] !== undefined;
   const isCorrect = answers[currentIdx] === q.correctIndex;
+  const relatedSlide = q.relatedSlideId ? getSlideById(q.relatedSlideId) : getSlideByQuestionId(q.id);
 
   return (
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" onClick={() => { if (timerRef.current) clearInterval(timerRef.current); setState('select'); }}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            if (urlSlideId) navigate(`/slides/${urlSlideId}`);
+            else if (urlTermId) navigate('/glossary');
+            else setState('select');
+          }}
+        >
           <ChevronLeft className="w-4 h-4" />
-          終了
+          {urlSlideId || urlTermId ? '戻る' : '終了'}
         </Button>
-        <div className="text-sm text-gray-500">{currentIdx + 1} / {quizQuestions.length}</div>
+        <div className="text-center">
+          {quizTitle && <div className="text-xs text-blue-600 font-medium truncate max-w-[180px]">{quizTitle}</div>}
+          <div className="text-sm text-gray-500">{currentIdx + 1} / {quizQuestions.length}</div>
+        </div>
         {mode === 'exam' && (
           <div className={cn('flex items-center gap-1 font-mono font-bold', timeLeft < 300 ? 'text-red-600' : 'text-gray-700')}>
             <Timer className="w-4 h-4" />
@@ -321,6 +415,17 @@ export const QuizPage = () => {
           <p className="text-base font-medium text-gray-900 leading-relaxed">{q.text}</p>
         </CardBody>
       </Card>
+
+      {/* Slide link — always visible */}
+      {relatedSlide && (
+        <button
+          onClick={() => navigate(`/slides/${relatedSlide.id}?from=quiz`)}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors text-xs"
+        >
+          <BookOpen className="w-3.5 h-3.5 shrink-0" />
+          <span className="text-left">スライドで確認する：{relatedSlide.title}</span>
+        </button>
+      )}
 
       {/* Choices */}
       <div className="space-y-2">
@@ -351,13 +456,13 @@ export const QuizPage = () => {
               {isCorrect ? '✓ 正解！' : '✗ 不正解'}
             </p>
             <p className="text-sm text-gray-700">{q.explanation}</p>
-            {q.relatedSlideId && (
+            {!isCorrect && relatedSlide && (
               <button
-                onClick={() => navigate(`/slides/${q.relatedSlideId}?from=quiz`)}
-                className="mt-2 text-xs text-blue-600 hover:underline flex items-center gap-1"
+                onClick={() => navigate(`/slides/${relatedSlide.id}?from=quiz`)}
+                className="mt-3 w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-blue-300 text-blue-700 hover:bg-blue-50 transition-colors text-sm font-medium"
               >
-                <BookOpen className="w-3 h-3" />
-                スライドで復習する
+                <BookOpen className="w-4 h-4 shrink-0" />
+                <span className="text-left">スライドで復習する：{relatedSlide.title}</span>
               </button>
             )}
           </CardBody>

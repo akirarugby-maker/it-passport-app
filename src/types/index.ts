@@ -27,6 +27,12 @@ export interface SlideSection {
   relatedGlossaryIds?: string[];
 }
 
+export interface ComparisonTable {
+  title: string;
+  headers: string[];
+  rows: string[][];
+}
+
 export interface Slide {
   id: string;
   domain: Domain;
@@ -35,6 +41,7 @@ export interface Slide {
   sections: SlideSection[];
   quizQuestionIds: string[];
   order: number;
+  comparisons?: ComparisonTable[];
 }
 
 export interface GlossaryTerm {
