@@ -3,18 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import {
   Search, ChevronDown, ChevronUp, RotateCcw,
   BookOpen, ClipboardList, BookMarked, X, Info, Download, Upload, Database,
+  Zap, RefreshCw, CheckCircle, XCircle,
 } from 'lucide-react';
 import { Card, CardBody } from '@/components/ui/Card';
 import { useAppStore } from '@/store/useAppStore';
-import { slides } from '@/data/slides';
+import { slides, getSlideById, getSlideByQuestionId } from '@/data/slides';
 import { glossaryTerms } from '@/data/glossary';
 import { questions } from '@/data/questions';
 import { domainLabel } from '@/utils/domain';
 import { cn } from '@/utils/cn';
-import type { Domain, Slide, StudyProgress } from '@/types';
+import type { Domain, Slide, StudyProgress, Question } from '@/types';
 
 const DOMAINS: Domain[] = ['strategy', 'management', 'technology'];
 const TARGET = new Date('2026-08-20T00:00:00+09:00');
+const ANSWER_LABELS = ['ア', 'イ', 'ウ', 'エ'] as const;
+
+function shuffleChoicesHP(q: Question): Question {
+  const paired = q.choices.map((c, i) => ({ c, isCorrect: i === q.correctIndex }));
+  for (let i = paired.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [paired[i], paired[j]] = [paired[j], paired[i]];
+  }
+  return { ...q, choices: paired.map((p) => p.c), correctIndex: paired.findIndex((p) => p.isCorrect) };
+}
 
 function getTimeLeft() {
   const diff = TARGET.getTime() - Date.now();
@@ -63,6 +74,270 @@ const defaultAppState = {
   lastStudyDate: '',
   navigationHistory: {},
 };
+
+function SurpriseQuizPanel() {
+  const navigate = useNavigate();
+  const { progress, addAnswer } = useAppStore();
+
+  // 学習済みスライドの問題を抽出
+  const studiedPool = useMemo(() => {
+    const studiedSlideIds = new Set<string>();
+    for (const slide of slides) {
+      if (slide.sections.some((s) => (progress.slidesSections[s.id]?.count ?? 0) > 0)) {
+        studiedSlideIds.add(slide.id);
+      }
+    }
+    return questions.filter((q) => {
+      const slideId = q.relatedSlideId ?? getSlideByQuestionId(q.id)?.id;
+      return slideId ? studiedSlideIds.has(slideId) : false;
+    });
+  }, [progress.slidesSections]);
+
+  // クイズ状態
+  const [quizQs, setQuizQs] = useState<Question[]>([]);
+  const [idx, setIdx] = useState(0);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [answered, setAnswered] = useState(false);
+  const [results, setResults] = useState<{ q: Question; ok: boolean; sel: number }[]>([]);
+  const [phase, setPhase] = useState<'quiz' | 'done'>('quiz');
+  const initialized = useRef(false);
+
+  const pickRandom = (pool: Question[]) => {
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    setQuizQs(shuffled.slice(0, Math.min(5, shuffled.length)).map(shuffleChoicesHP));
+    setIdx(0);
+    setSelected(null);
+    setAnswered(false);
+    setResults([]);
+    setPhase('quiz');
+  };
+
+  // アプリ起動時に1回だけ選出
+  useEffect(() => {
+    if (!initialized.current && studiedPool.length > 0) {
+      initialized.current = true;
+      pickRandom(studiedPool);
+    }
+  }, [studiedPool]);
+
+  const currentQ = quizQs[idx] ?? null;
+  const relatedSlide = currentQ
+    ? (currentQ.relatedSlideId ? getSlideById(currentQ.relatedSlideId) : getSlideByQuestionId(currentQ.id))
+    : null;
+
+  const handleSelect = (i: number) => {
+    if (answered || !currentQ) return;
+    setSelected(i);
+    setAnswered(true);
+    const ok = i === currentQ.correctIndex;
+    addAnswer({
+      questionId: currentQ.id,
+      isCorrect: ok,
+      selectedIndex: i,
+      timestamp: new Date().toISOString(),
+      mode: 'random',
+    });
+    setResults((r) => [...r, { q: currentQ, ok, sel: i }]);
+  };
+
+  const handleNext = () => {
+    if (idx + 1 >= quizQs.length) {
+      setPhase('done');
+    } else {
+      setIdx((i) => i + 1);
+      setSelected(null);
+      setAnswered(false);
+    }
+  };
+
+  if (studiedPool.length === 0) {
+    return (
+      <Card>
+        <CardBody>
+          <div className="flex items-center gap-2 mb-1">
+            <Zap className="w-4 h-4 text-amber-400" />
+            <h3 className="text-sm font-bold text-gray-800">抜き打ちテスト</h3>
+          </div>
+          <p className="text-xs text-gray-500">スライド学習を進めると、学習済みの内容から抜き打ちテストが出題されます。</p>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardBody className="space-y-3">
+        {/* ヘッダー */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-amber-500" />
+            <h3 className="text-sm font-bold text-gray-800">抜き打ちテスト</h3>
+            {phase === 'quiz' && quizQs.length > 0 && (
+              <span className="text-xs bg-amber-100 text-amber-700 font-medium px-2 py-0.5 rounded-full">
+                {idx + 1} / {quizQs.length}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={() => pickRandom(studiedPool)}
+            className="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-600 transition-colors border border-gray-200 rounded-lg px-2 py-1 hover:border-blue-300"
+          >
+            <RefreshCw className="w-3 h-3" />
+            別の問題
+          </button>
+        </div>
+
+        {/* 問題フェーズ */}
+        {phase === 'quiz' && currentQ && (
+          <>
+            <span className={cn(
+              'inline-block text-xs px-2 py-0.5 rounded-full font-medium',
+              currentQ.domain === 'strategy' ? 'bg-blue-100 text-blue-700' :
+              currentQ.domain === 'management' ? 'bg-green-100 text-green-700' :
+              'bg-purple-100 text-purple-700'
+            )}>
+              {domainLabel[currentQ.domain]}
+            </span>
+
+            <p className="text-sm text-gray-800 leading-relaxed font-medium">{currentQ.text}</p>
+
+            {/* 関連スライドリンク（常時表示） */}
+            {relatedSlide && (
+              <button
+                onClick={() => navigate(`/slides/${relatedSlide.id}?from=home`)}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors text-xs"
+              >
+                <BookOpen className="w-3.5 h-3.5 shrink-0" />
+                <span className="text-left">スライドで確認：{relatedSlide.title}</span>
+              </button>
+            )}
+
+            {/* 選択肢 */}
+            <div className="space-y-1.5">
+              {currentQ.choices.map((choice, ci) => {
+                let cls = 'w-full text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ';
+                if (!answered) {
+                  cls += 'border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-300 text-gray-700';
+                } else if (ci === currentQ.correctIndex) {
+                  cls += 'border-green-400 bg-green-50 text-green-800 font-medium';
+                } else if (ci === selected) {
+                  cls += 'border-red-300 bg-red-50 text-red-700';
+                } else {
+                  cls += 'border-gray-100 bg-gray-50 text-gray-400';
+                }
+                return (
+                  <button key={ci} onClick={() => handleSelect(ci)} disabled={answered} className={cls}>
+                    <span className="font-bold mr-2">{ANSWER_LABELS[ci]}.</span>{choice}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* 解答後フィードバック */}
+            {answered && (
+              <div className={cn(
+                'rounded-xl p-3 space-y-2 border',
+                selected === currentQ.correctIndex
+                  ? 'bg-green-50 border-green-200'
+                  : 'bg-red-50 border-red-200'
+              )}>
+                <div className="flex items-center gap-2">
+                  {selected === currentQ.correctIndex
+                    ? <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
+                    : <XCircle className="w-4 h-4 text-red-500 shrink-0" />
+                  }
+                  <span className={cn(
+                    'text-sm font-bold',
+                    selected === currentQ.correctIndex ? 'text-green-700' : 'text-red-600'
+                  )}>
+                    {selected === currentQ.correctIndex
+                      ? '正解！'
+                      : `不正解（正解：${ANSWER_LABELS[currentQ.correctIndex]}）`
+                    }
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600 leading-relaxed">{currentQ.explanation}</p>
+                {selected !== currentQ.correctIndex && relatedSlide && (
+                  <button
+                    onClick={() => navigate(`/slides/${relatedSlide.id}?from=home`)}
+                    className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    {relatedSlide.title}で復習する →
+                  </button>
+                )}
+                <button
+                  onClick={handleNext}
+                  className="w-full py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-colors"
+                >
+                  {idx + 1 >= quizQs.length ? '結果を見る →' : '次の問題 →'}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* 完了フェーズ */}
+        {phase === 'done' && (
+          <>
+            <div className="text-center py-2">
+              <p className="text-3xl font-bold text-gray-900">
+                {results.filter((r) => r.ok).length}
+                <span className="text-lg text-gray-400 font-normal"> / {results.length}問</span>
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">正解</p>
+            </div>
+
+            <div className="space-y-2">
+              {results.map((r, i) => {
+                const slide = r.q.relatedSlideId
+                  ? getSlideById(r.q.relatedSlideId)
+                  : getSlideByQuestionId(r.q.id);
+                return (
+                  <div key={i} className={cn(
+                    'rounded-lg p-2.5 border',
+                    r.ok ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+                  )}>
+                    <div className="flex items-start gap-2">
+                      {r.ok
+                        ? <CheckCircle className="w-3.5 h-3.5 text-green-600 shrink-0 mt-0.5" />
+                        : <XCircle className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+                      }
+                      <p className="text-xs text-gray-700 flex-1 line-clamp-2">{r.q.text}</p>
+                    </div>
+                    {!r.ok && slide && (
+                      <button
+                        onClick={() => navigate(`/slides/${slide.id}?from=home`)}
+                        className="mt-1.5 ml-5 flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        <BookOpen className="w-3 h-3" />
+                        {slide.title}で復習する →
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {results.some((r) => !r.ok) && (
+              <p className="text-xs text-red-500 text-center">
+                ❗ 間違えた問題は苦手問題に自動登録されました
+              </p>
+            )}
+
+            <button
+              onClick={() => pickRandom(studiedPool)}
+              className="w-full py-2 rounded-xl border border-blue-300 text-blue-600 text-xs font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              別の5問でもう一度
+            </button>
+          </>
+        )}
+      </CardBody>
+    </Card>
+  );
+}
 
 function ExportImportPanel() {
   const state = useAppStore();
@@ -350,7 +625,10 @@ export const HomePage = () => {
         </div>
       </div>
 
-      {/* ④ 進捗表 */}
+      {/* ④ 抜き打ちテスト */}
+      <SurpriseQuizPanel />
+
+      {/* ⑤ 進捗表 */}
       <div>
         <div className="flex items-start gap-1.5 mb-2">
           <h2 className="font-bold text-gray-900 text-sm">学習進捗</h2>
